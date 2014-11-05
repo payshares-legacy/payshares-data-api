@@ -44,7 +44,7 @@ getTransactions({
   
   res.transactions.forEach(function(row){
     if (!row.type=='sent')    return;
-    if (!row.currency=='XRP') return;
+    if (!row.currency=='STR') return;
     if (row.amount!=1000) return;
     if (!accounts[row.counterparty]) accounts[row.counterparty] = {amount:0,count:0};
 

@@ -1,13 +1,14 @@
 var winston = require('winston'),
   moment    = require('moment'),
-  ripple    = require('ripple-lib'),
+  _         = require('lodash'),
+  stellar    = require('stellar-lib'),
   async     = require('async');
 
 
 /**
  *  topMarkets: 
  * 
- *  the total trading volume for the top markets on the ripple network 
+ *  the total trading volume for the top markets on the stellar network 
  *  for a given time period, normalized USD. Returns data for the last 24 hours 
  *  if no arguments are given.
  *
@@ -16,9 +17,9 @@ var winston = require('winston'),
  * {
  *    startTime : (any momentjs-readable date), // optional, defaults to 1 day before end time
  *    endTime   : (any momentjs-readable date), // optional, defaults to now
- *    exchange  : {                             // optional, defaults to XRP
- *      currency  : (XRP, USD, BTC, etc.),         
- *      issuer    : "rAusZ...."                 // optional, required if currency != XRP
+ *    exchange  : {                             // optional, defaults to STR
+ *      currency  : (STR, USD, BTC, etc.),         
+ *      issuer    : "rAusZ...."                 // optional, required if currency != STR
  *    }
  *  }
  *
@@ -27,14 +28,14 @@ var winston = require('winston'),
  * { 
  *    startTime    : '2014-03-13T20:26:24+00:00',   //period start
  *    endTime      : '2014-03-14T20:26:24+00:00',   //period end
- *    exchange     : { currency: 'XRP' },           //requested exchange currency
- *    exchangeRate : 1,                             //XRP exchange rate of requested currency
+ *    exchange     : { currency: 'STR' },           //requested exchange currency
+ *    exchangeRate : 1,                             //STR exchange rate of requested currency
  *    total        : 1431068.4284775178,            //total volume in requested currency
  *    count        : 627,                           //number of trades
  *    components   : [                              //list of component markets
  *      { 
  *        base            : {"currency":"USD","issuer":"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
- *        counter         : {"currency":"XRP"},
+ *        counter         : {"currency":"STR"},
  *        rate            : 69.9309953931345,
  *        count           : 99,
  *        amount          : 3107.9273091242917,
@@ -63,15 +64,15 @@ var winston = require('winston'),
 function topMarkets(params, callback) {
 
   var cacheKey, viewOpts = {};
-  var ex = params.exchange || {currency:"XRP"};
+  var ex = params.exchange || {currency:"STR"};
   
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "XRP" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "STR" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "XRP" && ex.issuer)
-    return callback('XRP cannot have an issuer');
+  else if (ex.currency == "STR" && ex.issuer)
+    return callback('STR cannot have an issuer');
 
   //these must be traded in terms of XRP - perhaps we can change this later
   var marketPairs = [
@@ -296,24 +297,24 @@ function topMarkets(params, callback) {
       var exchangeRate;
       var rates = { };
       
-      //get rates vs XRP
+      //get rates vs STR
       pairs.forEach(function(pair, index) {
-        if (pair.counter.currency === 'XRP') {
+        if (pair.counter.currency === 'STR') {
           rates[pair.base.currency + "." + pair.base.issuer] = pair.rate;
         }
       });
       
       
       
-      if (ex.currency == 'XRP') { 
+      if (ex.currency == 'STR') { 
         exchangeRate = 1;
       } else if (rates[ex.currency + '.' + ex.issuer]) {
         exchangeRate = 1 / rates[ex.currency + '.' + ex.issuer];
       } 
       
-      //convert non - XRP to XRP value
+      //convert non - STR to STR value
       pairs.forEach(function(pair, index) {
-        if (pair.counter.currency !== 'XRP') {
+        if (pair.counter.currency !== 'STR') {
           pair.rate = rates[pair.base.currency + "." + pair.base.issuer];
         }  
       })
@@ -358,14 +359,14 @@ function topMarkets(params, callback) {
 
 
   /*
-   * get XRP to specified currency conversion
+   * get STR to specified currency conversion
    * 
    */
   function getConversion (params, callback) {
     
     // Mimic calling offersExercised 
     require("./offersExercised")({
-      base      : {currency:"XRP"},
+      base      : {currency:"STR"},
       counter     : {currency:params.currency,issuer:params.issuer},
       startTime : params.startTime,
       endTime   : params.endTime,

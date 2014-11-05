@@ -44,7 +44,7 @@ var winston = require('winston'),
  *    "BTC",
  *    "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
  *    0.44114996160201914,
- *    "XRP",
+ *    "STR",
  *    null,
  *    19220.903827,
  *    "buy",
@@ -75,7 +75,7 @@ var winston = require('winston'),
  *        "amount": 0.0008549999942999986
  *      },
  *      "counter": {
- *        "currency": "XRP",
+ *        "currency": "STR",
  *        "issuer": null,
  *        "amount": 37.449374
  *      },      

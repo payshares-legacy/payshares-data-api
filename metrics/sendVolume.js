@@ -63,7 +63,7 @@ function getStats (start, end, index) {
       
     } else { 
       if (!rows[0]) {
-        var header = ["startTime", "totalVolume", "count", "XRPrate"];
+        var header = ["startTime", "totalVolume", "count", "STRrate"];
         res.components.forEach(function(c){
           if (c.issuer) {
             header.push(c.currency+"/"+c.issuer+"-volume");

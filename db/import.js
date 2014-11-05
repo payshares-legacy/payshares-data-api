@@ -1,4 +1,4 @@
-var ripple   = require('ripple-lib');
+var stellar   = require('stellar-lib');
 var env      = process.env.NODE_ENV || "development";
 var config   = require('../deployment.environments.json')[env];
 var DBconfig = require('../db.config.json')[env];
@@ -15,7 +15,7 @@ var moment  = require('moment');
 var diff    = require('deep-diff');
 var async   = require('async');
 var store   = require('node-persist');
-var Ledger  = require('../node_modules/ripple-lib/src/js/ripple/ledger').Ledger;
+var Ledger  = require('../node_modules/stellar-lib/src/js/ripple/ledger').Ledger;
 var winston = require('winston');
 var http     = require('http');
 var https    = require('https');
@@ -55,8 +55,8 @@ if (reset) {
   importer.last      = store.getItem('last');
 }
 
-importer.first  = {index : config.startIndex || 32570};
-importer.remote = new ripple.Remote(options);
+importer.first  = {index : config.startIndex || 0};
+importer.remote = new stellar.Remote(options);
 
 winston.info("first ledger: ", importer.first ? importer.first.index : "");
 winston.info("last validated ledger: ", importer.validated ? importer.validated.index : "");
@@ -171,10 +171,10 @@ importer.handleLedger = function(remoteLedger, ledgerIndex, callback) {
 function formatRemoteLedger(ledger) {
 
   ledger.close_time_rpepoch   = ledger.close_time;
-  ledger.close_time_timestamp = ripple.utils.toTimestamp(ledger.close_time);
-  ledger.close_time_human     = moment(ripple.utils.toTimestamp(ledger.close_time))
+  ledger.close_time_timestamp = stellar.utils.toTimestamp(ledger.close_time);
+  ledger.close_time_human     = moment(stellar.utils.toTimestamp(ledger.close_time))
     .utc().format("YYYY-MM-DD HH:mm:ss Z");
-  ledger.from_rippled_api = true;
+  ledger.from_stellard_api = true;
 
   delete ledger.close_time;
   delete ledger.hash;
@@ -205,7 +205,7 @@ function formatRemoteLedger(ledger) {
       var fields = node.FinalFields || node.NewFields;
 
       if (typeof fields.BookDirectory === "string") {
-        node.exchange_rate = ripple.Amount.from_quality(fields.BookDirectory).to_json().value;
+        node.exchange_rate = stellar.Amount.from_quality(fields.BookDirectory).to_json().value;
       }
 
     });

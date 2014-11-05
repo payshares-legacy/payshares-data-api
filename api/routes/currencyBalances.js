@@ -13,8 +13,8 @@ var winston = require('winston'),
  *
  * {
  *    time      : "2014-03-13T20:39:26+00:00",  // time of desired snapshot, defaults to now
- *    currency  : (XRP, USD, BTC, etc.),        // optional, defaults to XRP        
- *    issuer    : "rAusZ...."                   // optional, required if currency != XRP
+ *    currency  : (STR, USD, BTC, etc.),        // optional, defaults to STR        
+ *    issuer    : "rAusZ...."                   // optional, required if currency != STR
  *    format    : (json,csv)                    // optional
  *    total     : true/false                    // optional, setting to true will return a total only
  * }
@@ -92,15 +92,15 @@ function currencyBalances (params, callback) {
   if (1) return callback('This API is unavailable');
   
   var viewOpts  = {};
-  var currency  = params.currency || "XRP";
+  var currency  = params.currency || "STR";
   var issuer    = params.issuer;
   var time      = params.time ? moment.utc(params.time) : moment.utc();
   var totalOnly = params.total ? true : false;
   
-  if (currency.toUpperCase() != "XRP" && !issuer)
+  if (currency.toUpperCase() != "STR" && !issuer)
     return callback('exchange issuer is required');
-  else if (currency == "XRP" && issuer)
-    return callback('XRP cannot have an issuer');
+  else if (currency == "STR" && issuer)
+    return callback('STR cannot have an issuer');
     
   var key = issuer ? currency+"."+issuer : currency;
   

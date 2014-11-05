@@ -4,7 +4,7 @@ var  _   = require('lodash'),
  
 /**
  *  gatewayNameToAddress translates a given name and, 
- *  optionally, a currency to its corresponding ripple address or
+ *  optionally, a currency to its corresponding stellar address or
  *  returns null
  */
 exports.gatewayNameToAddress = function ( name, currency ) {

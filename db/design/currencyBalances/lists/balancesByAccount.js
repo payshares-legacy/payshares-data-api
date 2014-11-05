@@ -24,11 +24,11 @@ function(head, req) {
 /*
  * 
  
- http://127.0.0.1:5984/ripple2/_design/currencyBalances/_list/balancesByAccount/v1?startkey=["CNY.rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK",2013]&endkey=["CNY.rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK",2015]
+ http://127.0.0.1:5984/stellar2/_design/currencyBalances/_list/balancesByAccount/v1?startkey=["CNY.rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK",2013]&endkey=["CNY.rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK",2015]
  
- http://127.0.0.1:5984/ripple2/_design/currencyBalances/_list/balancesByAccount/v1?startkey=["USD.rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",2013]&endkey=["USD.rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",2015]
+ http://127.0.0.1:5984/stellar2/_design/currencyBalances/_list/balancesByAccount/v1?startkey=["USD.rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",2013]&endkey=["USD.rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",2015]
  
- http://127.0.0.1:5984/ripple2/_design/currencyBalances/_list/balancesByAccount/v1?startkey=["XRP",2013]&endkey=["XRP",2015]
+ http://127.0.0.1:5984/stellar2/_design/currencyBalances/_list/balancesByAccount/v1?startkey=["STR",2013]&endkey=["STR",2015]
  
  
  * * 

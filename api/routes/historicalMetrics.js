@@ -31,7 +31,7 @@ var moment = require('moment');
  */
 var getMetric = function (params, callback) {
     
-  var ex        = params.exchange || {currency:"XRP"};  
+  var ex        = params.exchange || {currency:"STR"};  
   var result    = tools.parseTimeRange(params.startTime, params.endTime);
   var keys      = [];
   var increment = (params.timeIncrement || 'month').toLowerCase();
@@ -42,9 +42,9 @@ var getMetric = function (params, callback) {
   if (params.metric) params.metric = params.metric.toLowerCase();
   else return callback('metric parameter is required');
   
-  if      (params.metric === 'topmarkets')        keyBase = 'TM:XRP:hist:';
-  else if (params.metric === 'totalvaluesent')    keyBase = 'TVS:XRP:hist:';
-  else if (params.metric === 'totalnetworkvalue') keyBase = 'TNV:XRP:hist:';
+  if      (params.metric === 'topmarkets')        keyBase = 'TM:STR:hist:';
+  else if (params.metric === 'totalvaluesent')    keyBase = 'TVS:STR:hist:';
+  else if (params.metric === 'totalnetworkvalue') keyBase = 'TNV:STR:hist:';
   else return callback("invalid metric");
   
   if (result.error) {
@@ -54,10 +54,10 @@ var getMetric = function (params, callback) {
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "XRP" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "STR" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "XRP" && ex.issuer)
-    return callback('XRP cannot have an issuer');
+  else if (ex.currency == "STR" && ex.issuer)
+    return callback('STR cannot have an issuer');
       
   if (increment !== 'day' && 
       increment !== 'week' &&
@@ -87,7 +87,7 @@ var getMetric = function (params, callback) {
     
     if (params.exchange && rows.length) {
       var options = {
-        base      : {currency:'XRP'},
+        base      : {currency:'STR'},
         counter   : params.exchange,
         start     : moment.utc(result.start).subtract(1, increment).startOf(increment),
         end       : result.end,
@@ -108,7 +108,7 @@ var getMetric = function (params, callback) {
   
   
   /*
-   * get XRP to specified currency conversion
+   * get STR to specified currency conversion
    * 
    */
   var getConversion = function (params, callback) {

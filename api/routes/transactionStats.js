@@ -6,7 +6,7 @@ var winston = require('winston'),
 /*
  * transactionStats:
  * 
- * breakdown of valid transactions by type on the ripple network over time.
+ * breakdown of valid transactions by type on the stellar network over time.
  *
  * request:
  *
