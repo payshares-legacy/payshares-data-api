@@ -729,10 +729,11 @@ function ledgerImporter () {
       ledger.server = (server === 'http://0.0.0.0:51234' ? 'http://ct.stellar.com:51234' : server);
   
       // check that transactions hash to the expected value
-      /*var ledgerJsonTxHash;
+      var ledgerJsonTxHash;
       try {
        ledgerJsonTxHash = Ledger.from_json(ledger).calc_tx_hash().to_hex();
       } catch(err) {
+        console.log(new Error().stack);
         winston.error("Error calculating transaction hash: "+ledger.ledger_index +" "+ err);
         ledgerJsonTxHash = '';
       }
@@ -756,7 +757,7 @@ function ledgerImporter () {
         });
   
         return;
-      }*/
+      }
   
       if (DEBUG>2) winston.info('Got ledger: ' + ledger.ledger_index);  
       callback(null, ledger);
