@@ -30,8 +30,7 @@ var options = {
     trusted : false,
     
     servers: [
-      { host: 's-west.ripple.com', port: 443, secure: true },
-      { host: 's-east.ripple.com', port: 443, secure: true }
+      { host: 'http://live.stellar.org', port: 9002, secure: true }
     ],
 
     connection_offset: 0,
@@ -135,7 +134,7 @@ importer.handleLedger = function(remoteLedger, ledgerIndex, callback) {
   } 
   
   // keep track of which server ledgers came from
-  //ledger.server = (server === 'http://0.0.0.0:51234' ? 'http://ct.ripple.com:51234' : server);
+  //ledger.server = (server === 'http://0.0.0.0:9002' ? 'http://live.stellar.org:9002' : server);
 
   // check that transactions hash to the expected value
   var txHash;
