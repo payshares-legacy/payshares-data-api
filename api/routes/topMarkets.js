@@ -74,116 +74,17 @@ function topMarkets(params, callback) {
   else if (ex.currency == "STR" && ex.issuer)
     return callback('STR cannot have an issuer');
 
-  //these must be traded in terms of XRP - perhaps we can change this later
-  var marketPairs = [
-    {
-      // Bitstamp USD market
-      base: {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},
-      counter: {currency: 'XRP'}
-    },
-    {
-      // Bitstamp BTC market
-      base: {currency: 'BTC', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},
-      counter: {currency: 'XRP'}
-    },
-    {
-      // RippleCN CNY market
-      base: {currency: 'CNY', issuer: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK'},
-      counter: {currency: 'XRP'}
-    },
-    {
-      // RippleChina CNY market
-      base: {currency: 'CNY', issuer: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'},
-      counter: {currency: 'XRP'}
-    },
-    {
-      // RippleFox CNY market
-      base: {currency: 'CNY', issuer: 'rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y'},
-      counter: {currency: 'XRP'}
-    },    
-    {
-      // SnapSwap USD market
-      base: {currency: 'USD', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'},
-      counter: {currency: 'XRP'}
-    },
-    {
-      // SnapSwap USD market
-      base: {currency: 'EUR', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'},
-      counter: {currency: 'XRP'}
-    },    
-    {
-      // SnapSwap BTC market
-      base: {currency:'BTC', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'},
-      counter: {currency:'XRP'}
-    },
-    {
-      // Justcoin BTC market
-      base: {currency:'BTC', issuer: 'rJHygWcTLVpSXkowott6kzgZU6viQSVYM1'},
-      counter: {currency:'XRP'}
-    },    
-    {
-      // Ripple Trade Japan JPY
-      base: {currency:'JPY', issuer: 'rMAz5ZnK73nyNUL4foAvaxdreczCkG3vA6'},
-      counter: {currency:'XRP'}
-    },  
-    {
-      // TokyoJPU JPY
-      base: {currency:'JPY', issuer: 'r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN'},
-      counter: {currency:'XRP'}
-    },
-    {
-      // Snapswap EUR/ Snapswap USD
-      base    : {currency: 'EUR', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'},
-      counter : {currency: 'USD', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}  
-    }, 
-    {
-      // Bitstamp BTC/USD
-      base    : {currency: 'BTC', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},
-      counter : {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},
-    },  
-    {
-      // Bitstamp BTC/USD
-      base    : {currency: 'BTC', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'},
-      counter : {currency: 'USD', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'},
-    },     
-    {
-      // Bitstamp BTC/ Snapswap BTC
-      base    : {currency: 'BTC', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},
-      counter : {currency: 'BTC', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'},
-    },       
-    {
-      // Bitstamp USD/ Snapswap USD
-      base    : {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},
-      counter : {currency: 'USD', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'},
-    },    
-    {
-      // Bitstamp USD/ rippleCN CNY
-      base    : {currency: 'CNY', issuer: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK'},      
-      counter : {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'}
-    },    
-    {
-      // Bitstamp USD/ rippleChina CNY
-      base    : {currency: 'CNY', issuer: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'},
-      counter : {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'}
-    },
-    {
-      //ripple trade japan JPY/ Bitstamp USD
-      base    : {currency: 'JPY', issuer: 'rMAz5ZnK73nyNUL4foAvaxdreczCkG3vA6'},
-      counter : {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'}  
-    },
-    {
-      //ripple trade japan JPY/ Snapswap USD/
-      base    : {currency: 'JPY', issuer: 'rMAz5ZnK73nyNUL4foAvaxdreczCkG3vA6'},
-      counter : {currency: 'USD', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}  
-    },
-    {
-      //ripple trade japan JPY/ Snapswap USD/
-      base    : {currency: 'JPY', issuer: 'rMAz5ZnK73nyNUL4foAvaxdreczCkG3vA6'},
-      counter : {currency: 'CNY', issuer: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK'}  
-    } 
-    
-  ];
-
+  //these must be traded in terms of STR - perhaps we can change this later
+  var marketPairs = _(gatewayList).map(function(gateway) {
+    return _.map(gateway.accounts, function(account) {
+      return _.map(account.currencies, function(currency) {
+        return {
+          base: {currency: currency, issuer: account.address},
+          counter: {currency: 'STR'}
+        };
+      });
+    });
+  }).flatten().value();
 
 
   //parse startTime and endTime

@@ -78,18 +78,16 @@ function marketTraders (params, callback) {
   } else if (counter) {  
     return callback('base currency is required'); 
     
-  //use top XRP markets
-  } else currencies = [ 
-    {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},  //Bitstamp USD
-    {currency: 'BTC', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},  //Bitstamp BTC
-    {currency: 'BTC', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}, //Snapswap BTC
-    {currency: 'BTC', issuer: 'rfYv1TXnwgDDK4WQNbFALykYuEBnrR4pDX'}, //Dividend Rippler BTC
-    {currency: 'BTC', issuer: 'rNPRNzBB92BVpAhhZr4iXDTveCgV5Pofm9'}, //Ripple Israel BTC
-    {currency: 'USD', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}, //Snapswap USD
-    {currency: 'CNY', issuer: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK'}, //RippleCN CNY
-    {currency: 'CNY', issuer: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'}, //RippleChina CNY
-    {currency: 'JPY', issuer: 'rMAz5ZnK73nyNUL4foAvaxdreczCkG3vA6'}  //RippleTradeJapan JPY
-  ];
+  //use top STR markets
+  } else {
+    currencies = _(gatewayList).map(function(gateway) {
+      return _.map(gateway.accounts, function(account) {
+        return _.map(account.currencies, function(currency) {
+          return {currency: currency, issuer: account.address};
+        });
+      });
+    }).flatten().value();
+  }
 
   if (period=="7d")       params.startTime ? endTime.add(7,  "days")  : startTime.subtract(7,  "days");
   else if (period=="3d")  params.startTime ? endTime.add(3,  "days")  : startTime.subtract(3,  "days");

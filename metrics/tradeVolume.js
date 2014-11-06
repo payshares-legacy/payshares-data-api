@@ -53,7 +53,7 @@ while(time.diff(start)>0) {
 function getStats (start, end, index) { 
   
   topMarkets({
-    exchange : {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},
+    exchange : {currency: 'USD', issuer: 'gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q'},
     startTime : start,
     endTime : end,
     

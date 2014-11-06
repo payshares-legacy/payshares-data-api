@@ -30,7 +30,7 @@ db = require('../api/library/couchClient')({
 
 var getTransactions  = require("../api/routes/accountTransactions");
 var rows     = [];
-var giveaway = "rMTzGg7nPPEMJthjgEBfiPZGoAM7MEVa1r";
+var giveaway = "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q";
 
 getTransactions({
   "startTime"  : "jan 1, 2013 10:00 am z",
