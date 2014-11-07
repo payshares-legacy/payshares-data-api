@@ -22,7 +22,7 @@ function saveHistory (metric, interval, done) {
       interval != 'week' &&
       interval != 'day') return winston.error('invalid interval');
   
-  next(); //start
+  //next(); //start
   
   function getStat(callback) {
     if (metric == 'totalNetworkValue') params = {

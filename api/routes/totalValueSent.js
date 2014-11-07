@@ -1,6 +1,7 @@
 var winston = require('winston'),
   moment    = require('moment'),
-  ripple    = require('ripple-lib'),
+  _         = require('lodash'),
+  stellar    = require('stellar-lib'),
   async     = require('async');
 
 /**
@@ -8,16 +9,16 @@ var winston = require('winston'),
  * 
  *  total of amounts sent or exchanged from any wallet, either through a payment 
  *  or an "offerCreate" that exercises another offer, for a curated list of 
- *  currency/issuers and XRP, normalized to a specified currency
+ *  currency/issuers and STR, normalized to a specified currency
  *
  *  request : 
  *
  * {
  *    startTime : (any momentjs-readable date), // optional, defaults to 1 day before end time
  *    endTime   : (any momentjs-readable date), // optional, defaults to now
- *    exchange  : {                             // optional, defaults to XRP
- *      currency  : (XRP, USD, BTC, etc.),         
- *      issuer    : "rAusZ...."                 // optional, required if currency != XRP
+ *    exchange  : {                             // optional, defaults to STR
+ *      currency  : (STR, USD, BTC, etc.),         
+ *      issuer    : "rAusZ...."                 // optional, required if currency != STR
  *    }
  * }
  *
@@ -61,43 +62,37 @@ var winston = require('winston'),
 function totalValueSent(params, callback) {
 
   var options = {};
-  var ex = params.exchange || {currency:"XRP"};
+  var ex = params.exchange || {currency:"STR"};
   
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "XRP" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "STR" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "XRP" && ex.issuer)
-    return callback('XRP cannot have an issuer');
+  else if (ex.currency == "STR" && ex.issuer)
+    return callback('STR cannot have an issuer');
  
   options.ex = ex;
  
   //all currencies we are going to check    
-  options.currencies = [ 
-    {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},  //Bitstamp USD
-    {currency: 'BTC', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},  //Bitstamp BTC
-    {currency: 'BTC', issuer: 'rJHygWcTLVpSXkowott6kzgZU6viQSVYM1'}, //Justcoin BTC
-    {currency: 'USD', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}, //Snapswap USD
-    {currency: 'BTC', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}, //Snapswap BTC
-    {currency: 'EUR', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}, //Snapswap EUR
-    {currency: 'CNY', issuer: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK'}, //RippleCN CNY
-    {currency: 'CNY', issuer: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'}, //RippleChina CNY
-    {currency: 'CNY', issuer: 'rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y'}, //RippleFox CNY
-    {currency: 'JPY', issuer: 'rMAz5ZnK73nyNUL4foAvaxdreczCkG3vA6'}, //RippleTradeJapan JPY
-    {currency: 'JPY', issuer: 'r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN'}, //Tokyo JPY
-    {currency: 'XRP'}
-  ];
+  options.currencies = _(gatewayList).map(function(gateway) {
+      return _.map(gateway.accounts, function(account) {
+        return _.map(account.currencies, function(currency) {
+          return {currency: currency, issuer: account.address};
+        });
+      });
+    }).flatten().value();
+  options.currencies.push({currency: 'STR'});
 
   options.conversionPairs = [];
   options.currencies.forEach(function(currency) {
     
-    if (currency.currency == 'XRP') {
+    if (currency.currency == 'STR') {
       return;
     }
 
     options.conversionPairs.push({
-      base    : {currency: 'XRP'},
+      base    : {currency: 'STR'},
       counter : currency
     });
   });
@@ -206,7 +201,7 @@ function totalValueSent(params, callback) {
       getExchangeRates(options, function(error, rates){
         if (error) return callback(error);
         
-        var finalRate = options.ex.currency == "XRP" ? 1 : null;
+        var finalRate = options.ex.currency == "STR" ? 1 : null;
         
         rates.forEach(function(pair, index){
           currencies[index].rate            = pair.rate || 0; 
@@ -238,8 +233,8 @@ function totalValueSent(params, callback) {
           var total = 0, count = 0;
           currencies.forEach(function(currency, index) {
   
-            if (currency.currency == "XRP") {
-              currency.rate            = 1; //for XRP
+            if (currency.currency == "STR") {
+              currency.rate            = 1; //for STR
               currency.convertedAmount = currency.amount;
             }
             
@@ -303,14 +298,14 @@ function totalValueSent(params, callback) {
   
   
   /*
-   * get XRP to specified currency conversion
+   * get STR to specified currency conversion
    * 
    */
   function getConversion (params, callback) {
     
     // Mimic calling offersExercised 
     require("./offersExercised")({
-      base      : {currency:"XRP"},
+      base      : {currency:"STR"},
       counter   : {currency:params.currency,issuer:params.issuer},
       startTime : params.startTime,
       endTime   : params.endTime,

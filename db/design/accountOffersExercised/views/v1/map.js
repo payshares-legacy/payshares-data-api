@@ -42,7 +42,7 @@ function(doc) {
       } else {
         exchangeRate = exchangeRate / 1000000.0;        
         pay = {
-          currency : "XRP",
+          currency : "STR",
           issuer   : null,
           value    : (node.PreviousFields.TakerPays - node.FinalFields.TakerPays) / 1000000.0, // convert from drops
         }
@@ -58,7 +58,7 @@ function(doc) {
       } else {
         exchangeRate = exchangeRate * 1000000.0;
         get = {
-          currency : "XRP",
+          currency : "STR",
           issuer   : null,
           value    : (node.PreviousFields.TakerGets - node.FinalFields.TakerGets) / 1000000.0
         }

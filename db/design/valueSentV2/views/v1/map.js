@@ -44,20 +44,20 @@ function(doc) {
 
       var node = affNode.CreatedNode || affNode.ModifiedNode || affNode.DeletedNode;
 
-      // Look for XRP balance change in AccountRoot node
+      // Look for STR balance change in AccountRoot node
       if (node.LedgerEntryType === 'AccountRoot') {
 
-        var xrpBalChange = parseAccountRootBalanceChange(node, account);
+        var strBalChange = parseAccountRootBalanceChange(node, account);
         
-        if (xrpBalChange) {
-          xrpBalChange.value += parseFloat(tx.Fee); //remove the fee from the balance change
+        if (strBalChange) {
+          strBalChange.value += parseFloat(tx.Fee); //remove the fee from the balance change
           
-          //if we are still negative, XRP was sent.
+          //if we are still negative, STR was sent.
           //often this would be zero, indicating only a fee
-          //and not really sending XRP
-          if (xrpBalChange.value<0) {
-            xrpBalChange.value = dropsToXrp(xrpBalChange.value); //convert to XRP
-            accountBalanceChanges.push(xrpBalChange);
+          //and not really sending STR
+          if (strBalChange.value<0) {
+            strBalChange.value = dropsToXrp(strBalChange.value); //convert to STR
+            accountBalanceChanges.push(strBalChange);
           }
         }
       }
@@ -86,7 +86,7 @@ function(doc) {
       if (node.NewFields.Account === account) {
         return {
           value: dropsToXrp(node.NewFields.Balance),
-          currency: 'XRP',
+          currency: 'STR',
           issuer: ''
         };
       }
@@ -100,10 +100,10 @@ function(doc) {
         prevBal    = node.PreviousFields.Balance,
         balChange  = finalBal - prevBal;
       
-      //if the final balance is greater than the previous, xrp was sent
+      //if the final balance is greater than the previous, str was sent
       if (balChange<0) return {
         value    : balChange,
-        currency : 'XRP',
+        currency : 'STR',
         issuer   : ''
       };
     }
@@ -182,8 +182,8 @@ function(doc) {
     return parseFloat(drops) / 1000000.0;
   }
 
-  function xrpToDrops (xrp) {
-    return parseFloat(xrp) * 1000000.0;
+  function strToDrops (str) {
+    return parseFloat(str) * 1000000.0;
   }
 
 }

@@ -1,20 +1,21 @@
 var winston = require('winston'),
   moment    = require('moment'),
-  ripple    = require('ripple-lib'),
+  _         = require('lodash'),
+  stellar    = require('stellar-lib'),
   async     = require('async');
 /**
  *  totalNetworkValue: 
  * 
- *  total value of currencies for the top gateways on the ripple network, 
+ *  total value of currencies for the top gateways on the stellar network, 
  *  normalized to a specific currrency.
  *
  *  request : 
  *
  * {
  *    time : "2014-03-13T20:39:26+00:00"      //time of desired snapshot
- *    exchange  : {                           // optional, defaults to XRP
- *      currency  : (XRP, USD, BTC, etc.),         
- *      issuer    : "rAusZ...."               // optional, required if currency != XRP
+ *    exchange  : {                           // optional, defaults to STR
+ *      currency  : (STR, USD, BTC, etc.),         
+ *      issuer    : "rAusZ...."               // optional, required if currency != STR
  *    }
  * }
  *
@@ -61,43 +62,35 @@ var winston = require('winston'),
 function totalNetworkValue(params, callback) {
 
   var cacheKey, viewOpts = {};
-  var ex = params.exchange || {currency:"XRP"};
+  var ex = params.exchange || {currency:"STR"};
   
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "XRP" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "STR" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "XRP" && ex.issuer)
-    return callback('XRP cannot have an issuer');
+  else if (ex.currency == "STR" && ex.issuer)
+    return callback('STR cannot have an issuer');
  
  
   //all currencies we are going to check    
-  var currencies = [ 
-    {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},  //Bitstamp USD
-    {currency: 'USD', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}, //Snapswap USD
-    {currency: 'BTC', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},  //Bitstamp BTC
-    {currency: 'BTC', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}, //Snapswap BTC
-    {currency: 'BTC', issuer: 'rJHygWcTLVpSXkowott6kzgZU6viQSVYM1'}, //Justcoin BTC
-    {currency: 'EUR', issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'}, //Snapswap EUR
-    {currency: 'CNY', issuer: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK'}, //RippleCN CNY
-    {currency: 'CNY', issuer: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'}, //RippleChina CNY
-    {currency: 'CNY', issuer: 'rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y'}, //RippleFox CNY
-    {currency: 'JPY', issuer: 'rMAz5ZnK73nyNUL4foAvaxdreczCkG3vA6'}, //RippleTradeJapan JPY
-    {currency: 'JPY', issuer: 'r94s8px6kSw1uZ1MV98dhSRTvc6VMPoPcN'}, //TokyoJPY JPY
-    {currency: 'XAU', issuer: 'r9Dr5xwkeLegBeXq6ujinjSBLQzQ1zQGjH'}, //Ripple Singapore XAU
-    {currency: 'XAU', issuer: 'rrh7rf1gV2pXAoqA8oYbpHd8TKv5ZQeo67'}, //GBI XAU
-  ];
+  var currencies = _(gatewayList).map(function(gateway) {
+      return _.map(gateway.accounts, function(account) {
+        return _.map(account.currencies, function(currency) {
+          return {currency: currency, issuer: account.address};
+        });
+      });
+    }).flatten().value();
   
   var conversionPairs = [];
   currencies.forEach(function(currency) {
     
-    if (currency.currency == 'XRP') {
+    if (currency.currency == 'STR') {
       return;
     }
 
     conversionPairs.push({
-      base    : {currency: 'XRP'},
+      base    : {currency: 'STR'},
       counter : currency
     });
   });
@@ -149,7 +142,7 @@ function totalNetworkValue(params, callback) {
       getExchangeRates(time, conversionPairs, function(error, rates){
         if (error) return callback(error);
         
-        var finalRate = ex.currency == "XRP" ? 1 : null;
+        var finalRate = ex.currency == "STR" ? 1 : null;
         
         rates.forEach(function(pair, index){
           currencies[index].rate            = pair.rate; 
@@ -161,11 +154,11 @@ function totalNetworkValue(params, callback) {
               pair.counter.issuer   == ex.issuer) finalRate = pair.rate;
         });
         
-        getXRPbalance(function(error, balance){
+        getSTRbalance(function(error, balance){
           if (error) return callback(error);
           
           currencies.push({
-            currency : "XRP",
+            currency : "STR",
             amount   : balance
           })
           
@@ -190,8 +183,8 @@ function totalNetworkValue(params, callback) {
           var total = 0, count = 0;
           currencies.forEach(function(currency, index) {
   
-            if (currency.currency == "XRP") {
-              currency.rate            = 1; //for XRP
+            if (currency.currency == "STR") {
+              currency.rate            = 1; //for STR
               currency.convertedAmount = currency.amount;
             }
             
@@ -253,14 +246,14 @@ function totalNetworkValue(params, callback) {
   
   
   /*
-   * get XRP to specified currency conversion
+   * get STR to specified currency conversion
    * 
    */
   function getConversion (params, callback) {
     
     // Mimic calling offersExercised 
     require("./offersExercised")({
-        base      : {currency:"XRP"},
+        base      : {currency:"STR"},
         counter   : {currency:params.currency,issuer:params.issuer},
         startTime : params.startTime,
         endTime   : params.endTime,
@@ -281,7 +274,7 @@ function totalNetworkValue(params, callback) {
   *  getLatestLedgerSaved gets the ledger with the highest
   *  index saved in CouchDB
   */  
-  function getXRPbalance(callback) {
+  function getSTRbalance(callback) {
     db.list({descending:true, startkey:'_c', limit: 1}, function(error, res){
       if (error) return callback("CouchDB - " + error);  
       if (!res.rows.length) return callback("no ledgers saved"); //no ledgers saved;

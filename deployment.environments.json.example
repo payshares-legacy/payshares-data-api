@@ -6,9 +6,8 @@
     "maxSockets" : 150,
     "batchSize"  : 100,
     "startIndex" : 32570,
-    "rippleds"   :  [
-      "http://s_east.ripple.com:51234",
-      "http://s_west.ripple.com:51234"
+    "stellards"   :  [
+      "http://localhost:9002"
     ],
     "redis" : {
       "enabled" : true,
@@ -27,9 +26,8 @@
     "maxSockets" : 150,
     "batchSize"  : 100,
     "startIndex" : 32570, 
-    "rippleds"   :  [
-      "http://s_east.ripple.com:51234",
-      "http://s_west.ripple.com:51234"
+    "stellards"   :  [
+      "http://test.stellar.org:9002"
     ],
     "redis" : {
       "enabled" : true,
@@ -48,9 +46,8 @@
     "maxSockets"  : 150,  
     "batchSize"   : 100,
     "startIndex"  : 32570, 
-    "rippleds"    :  [
-      "http://s_east.ripple.com:51234",
-      "http://s_west.ripple.com:51234"
+    "stellards"    :  [
+      "http://live.stellar.org:9002
     ],
     "redis" : {
       "enabled" : true,

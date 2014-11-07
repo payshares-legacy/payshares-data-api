@@ -1,8 +1,8 @@
-##Ripple Historical Data Storage
+##Stellar Historical Data Storage
 
 ###Ledger Importing Process
 
-Historical ledgers from the Ripple Network are stored in couchDB through an ongoing importing process. This process consists of 3 parts: an importing script, an indexing triggerer, and a database validation script.
+Historical ledgers from the Stellar Network are stored in couchDB through an ongoing importing process. This process consists of 3 parts: an importing script, an indexing triggerer, and a database validation script.
 
 ####Importer.js
 

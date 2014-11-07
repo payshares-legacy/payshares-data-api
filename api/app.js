@@ -33,6 +33,7 @@ db      = require('./library/couchClient')({
   //},
   request_defaults : {timeout :30 * 1000}, //30 seconds max for couchDB 
 });
+gatewayNameToAddress = require('./utils').gatewayNameToAddress;
 
 //set up global debug and cache variables
 DEBUG = (process.argv.indexOf('debug')  !== -1) ? true : false;
@@ -153,13 +154,13 @@ if (CACHE) {
     //reset cache if the arg is present
     if (process.argv.indexOf('reset-cache') !== -1) redis.flushdb();
 /*    
-    redis.del("TVS:XRP:live:86400", function(err, res){
+    redis.del("TVS:STR:live:86400", function(err, res){
     });
     
-    redis.del("TM:XRP:live:86400", function(err, res){
+    redis.del("TM:STR:live:86400", function(err, res){
     });
     
-    redis.del("TNV:XRP:live", function(err, res){
+    redis.del("TNV:STR:live", function(err, res){
     });    
 */  
     redis.on("error", function (err) {

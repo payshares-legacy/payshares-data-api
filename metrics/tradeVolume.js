@@ -53,7 +53,7 @@ while(time.diff(start)>0) {
 function getStats (start, end, index) { 
   
   topMarkets({
-    exchange : {currency: 'USD', issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'},
+    exchange : {currency: 'USD', issuer: 'gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q'},
     startTime : start,
     endTime : end,
     
@@ -64,7 +64,7 @@ function getStats (start, end, index) {
       
     } else {
       if (!rows[0]) {
-        var header = ["startTime", "totalVolume", "count", "XRPrate"];
+        var header = ["startTime", "totalVolume", "count", "STRrate"];
         res.components.forEach(function(c){
           header.push(c.base.currency+"/"+c.counter.currency+"-volume");
           header.push(c.base.currency+"/"+c.counter.currency+"-count");
