@@ -593,7 +593,7 @@ function ledgerImporter () {
     //} else if (typeof identifier === 'string') {
     //  reqData.params[0].ledger_hash = identifier;
     } else {
-      reqData.params[0].ledger_index = 'closed';
+      reqData.params[0].ledger_index = 'validated';
     }
     
     // TODO check that this servers object is being updated correctly
