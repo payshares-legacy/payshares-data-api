@@ -89,6 +89,59 @@ app.post('/api/*', requestHandler);
 app.listen(config.port);
 winston.info('Listening on port ' + config.port);
 
+// Returns BTC/STR trades from any issuer.
+// Swollow errors and report an empty trade set.
+var bitcoinStellarTrades = require('./routes/bitcoinStellarTrades');
+app.get('/api/BTC/STR/trades', function(req, res) {
+  bitcoinStellarTrades(req.query, function(err, response) {
+    if(err) {
+      winston.error(err, " - /api/BTC/STR/trades", "(Spoof empty trade set) 200");
+      res.send(200, []);
+      return;
+    }
+
+    res.send(200, response);
+  });
+});
+
+// Set required ETag for orderbook requests to a constant value.
+app.head('/api/BTC/STR/orderbook', function(req, res) {
+  res.set('ETag', 'not-supported');
+  res.send(200);
+});
+
+// Returns an empty order book, since orderbooks require an issuer.
+app.get('/api/BTC/STR/orderbook', function(req, res) {
+  res.set('ETag', 'not-supported');
+  res.send(200, {bids: [], asks: []});
+});
+
+// Returns BTC/USD trades from any issuer.
+// Swollow errors and report an empty trade set.
+var bitcoinUSDollarTrades = require('./routes/bitcoinUSDollarTrades');
+app.get('/api/BTC/USD/trades', function(req, res) {
+  bitcoinUSDollarTrades(req.query, function(err, response) {
+    if(err) {
+      winston.error(err, " - /api/BTC/USD/trades", "(Spoof empty trade set) 200");
+      res.send(200, []);
+      return;
+    }
+
+    res.send(200, response);
+  });
+});
+
+// Set required ETag for orderbook requests to a constant value.
+app.head('/api/BTC/USD/orderbook', function(req, res) {
+  res.set('ETag', 'not-supported');
+  res.send(200);
+});
+
+// Returns an empty order book, since orderbooks require an issuer.
+app.get('/api/BTC/USD/orderbook', function(req, res) {
+  res.set('ETag', 'not-supported');
+  res.send(200, {bids: [], asks: []});
+});
 
 //function to handle all incoming requests
 function requestHandler(req, res) {
