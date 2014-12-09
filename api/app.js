@@ -203,6 +203,11 @@ if (CACHE) {
     
   } else {
     redis = require("redis").createClient(config.redis.port, config.redis.host, config.redis.options);
+
+    // Allow configuring a redis db number for global use.
+    if(config.redis.options.db) {
+      redis.select(config.redis.options.db);
+    }
     
     //reset cache if the arg is present
     if (process.argv.indexOf('reset-cache') !== -1) redis.flushdb();
