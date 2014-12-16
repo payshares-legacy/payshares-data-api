@@ -5,7 +5,7 @@
     "datadogPort" : 8125, 
     "maxSockets" : 150,
     "batchSize"  : 100,
-    "startIndex" : 32570,
+    "startIndex" : 2227574,
     "stellards"   :  [
       "http://localhost:9002"
     ],
@@ -25,7 +25,7 @@
     "datadogPort" : 8125,
     "maxSockets" : 150,
     "batchSize"  : 100,
-    "startIndex" : 32570, 
+    "startIndex" : 2227574, 
     "stellards"   :  [
       "http://test.stellar.org:9002"
     ],
@@ -45,7 +45,7 @@
     "datadogPort" : 8125,
     "maxSockets"  : 150,  
     "batchSize"   : 100,
-    "startIndex"  : 32570, 
+    "startIndex"  : 2227574, 
     "stellards"    :  [
       "http://live.stellar.org:9002
     ],

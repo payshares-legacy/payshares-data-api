@@ -117,65 +117,20 @@ function accountsCreated(params, callback) {
   db.view('accountsCreated', 'v1', viewOpts, function(error, couchRes){
 
     if (error) return callback ('CouchDB - ' + error);
-
-/*
-  
-  //get the number of accounts on the genesis ledger - 
-  //the total is 136, we dont need to check every time -
-  //just left this here to see the logic for arriving at 136
-  
-  var l     = require('../db/32570_full.json').result.ledger;
-  var genAccounts = 0;
-  for (var i=0; i<l.accountState.length; i++) {
-    var obj =  l.accountState[i]; 
-    if (obj.LedgerEntryType=="AccountRoot") genAccounts++;
-  }
-
-  console.log(genAccounts);
-  
-*/
   
   
-/* below is a workaround for the fact that we dont have ledger history
-   before ledger #32570 */ 
+/* below is a workaround for the fact that we dont care about the ledger history
+   before ledger #2227574 */ 
    
-    var genTime      = moment("2013-Jan-01 03:21:10+00:00"); //date of genesis ledger
-    var nGenAccounts = 136;
-
-    if (viewOpts.reduce === false) {
-      
-      if (range.start.isBefore(genTime) &&
-        range.end.isAfter(genTime)) {  
-        
-        var l = require('../../db/32570_full.json').result.ledger;
-        var genAccounts = [];
-        for (var i=0; i<l.accountState.length; i++) {
-          var obj =  l.accountState[i];
-
-          if (obj.LedgerEntryType=="AccountRoot") {
-            genAccounts.push({
-              key : genTime.format(),
-              value : [obj.Account, null],
-              id : 32570
-            });
-          }
-        }
-        
-        couchRes.rows = genAccounts.concat(couchRes.rows);   
-        if (viewOpts.limit || viewOpts.skip) {
-          var skip = viewOpts.skip || 0;
-          if (viewOpts.limit) couchRes.rows = couchRes.rows.slice(skip, viewOpts.limit+skip);  
-          else                couchRes.rows = couchRes.rows.slice(skip);
-        }
-      }      
-    } 
+    var genTime      = moment("2014-Dec-11 22:55:10+00:00"); //date of first ledger
+    var nGenAccounts = 2879888;
 
 //if we are getting intervals, add the genesis accounts to the
 //first interval if it is the same date as the genesis ledger 
 //NOTE this is not a perfect solution because the data will not be
 //correct if the start time is intraday and after the genesis ledger
 //close time
-    else if (viewOpts.group_level) { 
+    if (viewOpts.group_level) { 
       
       if (couchRes.rows.length)  {    
 
