@@ -1,5 +1,3 @@
-API Documentation: http://docs.stellardataapi.apiary.io/
-
 # Stellar Data API
 The Stellar data API is the end point for stellar-charts-frontend and other applications that need historical data.  This API is built on Node.js, CouchDB, and Redis.
 
