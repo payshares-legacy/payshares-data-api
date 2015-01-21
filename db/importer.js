@@ -25,8 +25,6 @@ function ledgerImporter () {
     Ledger   = require('../node_modules/stellar-lib/src/js/ripple/ledger').Ledger,
     options  = {};
   
-  winston.add(winston.transports.File, { filename: 'importer.log' });
-      
   var env    = process.env.NODE_ENV || "development",
     config   = require('../deployment.environments.json')[env],
     DBconfig = require('../db.config.json')[env],
