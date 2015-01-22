@@ -1,7 +1,5 @@
-API Documentation: http://docs.stellardataapi.apiary.io/
-
 # Stellar Data API
-The Stellar data API is the end point for stellarcharts and other applications that need historical data.  This API is built on Node.js, CouchDB, and Redis.
+The Stellar data API is the end point for stellar-charts-frontend and other applications that need historical data.  This API is built on Node.js, CouchDB, and Redis.
 
 ## Components
 
@@ -61,7 +59,7 @@ Exchange offers exercised over time - returns volume in terms of base and counte
 
         {    
             base : {currency: "STR"},
-            counter : {currency: "USD", issuer: "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
+            counter : {currency: "USD", issuer: "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"},
             startTime : "2014-03-11",
             endTime : "2014-03-12",
             timeIncrement : "minute",
@@ -140,7 +138,7 @@ Exchange offers exercised over time - returns volume in terms of base and counte
             },
             counter : {
                 currency : "USD",
-                issuer   : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"
+                issuer   : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
             },
             timeIncrement : "hours",
             timeMultiple  : 4,
@@ -196,7 +194,7 @@ The amount of value sent from all accounts for a specific currency over time.
         
         {
             currency  : "USD",
-            issuer    : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
+            issuer    : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q",
             startTime : "Mar 5, 2014 10:00 am",
             endTime   : "Mar 6, 2014 10:00 am"
         }
@@ -242,7 +240,7 @@ The amount of value sent from all accounts for a specific currency over time.
 
         {
             currency      : "BTC",
-            issuer        : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
+            issuer        : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q",
             startTime     : "2014-03-05T18:00:00+00:00",
             endTime       : "2014-03-06T18:00:00+00:00",
             timeIncrement : "hour",
@@ -291,7 +289,7 @@ Returns the total capitalization (outstanding balance) of a specified issuer & s
 
         {
             currencies : [
-              {currency:"USD", issuer:"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
+              {currency:"USD", issuer:"gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"},
               {currency:"USD", issuer:"rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q"},
             ],
             
@@ -312,7 +310,7 @@ Returns the total capitalization (outstanding balance) of a specified issuer & s
             [
                 {
                     currency : "USD",
-                    issuer   : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
+                    issuer   : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q",
                     name     : "Bitstamp",
                     results : [
                         ["2013-02-01T00:00:00+00:00",0],
@@ -571,7 +569,7 @@ Returns a list of accounts that participated in trading the specified trading pa
             },
             counter : {
                 currency : "USD",
-                issuer   : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"
+                issuer   : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
             },
             range : "24h"
         }
@@ -653,14 +651,14 @@ Total value of currencies for the top gateways on the stellar network, normalize
                 time     : "2014-03-13T20:39:26+00:00",
                 exchange : {
                     currency : "USD", 
-                    issuer   : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"
+                    issuer   : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
                 },
                 exchangeRate : 0.014301217579817786,
                 total        : 726824.6504823748,
                 components   : [
                     {
                         currency        : "USD",
-                        issuer          : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
+                        issuer          : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q",
                         amount          : 27606.296227064257,
                         rate            : 1,
                         convertedAmount : 27606.296227064257
@@ -688,7 +686,7 @@ The total trading volume for the top 5 markets on the stellar network for a give
             endTime   : "2014-01-16 8:00 PM",
             exchange  : {
                 currency : "USD",
-                issuer : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"
+                issuer : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
             }
         }
 
@@ -705,7 +703,7 @@ The total trading volume for the top 5 markets on the stellar network for a give
                 { 
                     base : {
                         currency:"USD",
-                        issuer:"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"
+                        issuer:"gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
                     },
                     counter : {
                         currency:"STR"
@@ -738,7 +736,7 @@ The total of amounts sent or exchanged from any wallet, either through a payment
             endTime   : "2014-01-16 8:00 PM",
             exchange  : {
                 currency : "USD",
-                issuer : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"
+                issuer : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
             }
         }
 
@@ -749,7 +747,7 @@ The total of amounts sent or exchanged from any wallet, either through a payment
             endTime      : "2014-03-14T20:39:26+00:00",
             exchange     : {
                 currency : "USD",
-                issuer   : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"
+                issuer   : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
             },
             exchangeRate : 0.014301217579817786,
             total        : 726824.6504823748,
@@ -757,7 +755,7 @@ The total of amounts sent or exchanged from any wallet, either through a payment
             components   : [
                 {
                     currency        : "USD",
-                    issuer          : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",
+                    issuer          : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q",
                     amount          : 27606.296227064257,
                     count           : 51,
                     rate            : 1,
@@ -1158,7 +1156,7 @@ Returns all offer creates and cancels over time for a given trading pair.
             },
             counter : {
                 currency : "USD", 
-                issuer   : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"
+                issuer   : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
             },
             startTime     : "Feb 10, 2014 4:44:00 am",
             endTime       : "Feb 11, 2014 5:09:00 am",
@@ -1213,7 +1211,7 @@ Returns all offer creates and cancels over time for a given trading pair.
             },
             counter : { 
                 currency : "USD",
-                issuer   : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"
+                issuer   : "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
             },
             startTime     : "2014-02-10T12:44:00+00:00",
             endTime       : "2014-02-11T13:09:00+00:00",
