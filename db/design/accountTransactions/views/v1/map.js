@@ -28,7 +28,7 @@ function(doc) {
     //var isConvert  = (tx.TransactionType=='Payment' && tx.Account==tx.Destination) ? true : false;
     var offers   = [], 
       IOUchanges = [],
-      STRchanges = [];
+      XPRchanges = [];
     var type;
       
     //loop through the affected nodes to find values sent and received
@@ -37,7 +37,7 @@ function(doc) {
       var node = affNode.CreatedNode || affNode.ModifiedNode || affNode.DeletedNode;
       var change = null, fee = parseFloat(tx.Fee);
       
-      //Look for STR balance changes in AccountRoot nodes
+      //Look for XPR balance changes in AccountRoot nodes
       if (node.LedgerEntryType === 'AccountRoot') {
         change = parseAccountRoot(node, tx.Account, fee);
         
@@ -46,8 +46,8 @@ function(doc) {
           //these are the result of offers exercised for cross currency payments
           //and would require similar handling to "convert" and offer create.
           if (change.account != tx.Account && change.account != tx.Destination) return;  
-          if (!type) type = "STR";
-          STRchanges.push(change);
+          if (!type) type = "XPR";
+          XPRchanges.push(change);
         }
         
       //Look for IOU balance changes in RippleState nodes
@@ -119,7 +119,7 @@ function(doc) {
     //issuers own currency - in this case there will only be one IOU balance
     //change, therefore we need to recipricate it.  I'm not sure that
     //this covers every situation.
-    if (type=="issuer" && !STRchanges.length && IOUchanges.length==1) {
+    if (type=="issuer" && !XPRchanges.length && IOUchanges.length==1) {
       var c = IOUchanges[0];
       IOUchanges.push({
         account      : c.counterparty,
@@ -131,11 +131,11 @@ function(doc) {
       });
     }
     
-    //handle STR balance changes. We already excluded
+    //handle XPR balance changes. We already excluded
     //any that did not involve the sending or destination
     //account, so the counterparty will whichever is the
     //opposite of the account whose balance changed.          
-    STRchanges.forEach(function(c){
+    XPRchanges.forEach(function(c){
       c.counterparty = c.account == tx.Account ? tx.Destination : tx.Account;
       emit([c.account].concat(timestamp), [c.currency, c.issuer, c.type, c.value, c.counterparty, unix, tx.hash]);
     });
@@ -146,7 +146,7 @@ function(doc) {
     });
       
     //if (type=="issuer") {  
-    //  STRchanges.forEach(function(c){log(c)});
+    //  XPRchanges.forEach(function(c){log(c)});
     //  IOUchanges.forEach(function(c){log(c)});
     //  log(tx.hash);
     //}   
@@ -157,13 +157,13 @@ function(doc) {
     var balChange, value;
     
     //if a new account root has been created, this can
-    //only be STR received, and cannot be the sending account
+    //only be XPR received, and cannot be the sending account
     if (node.NewFields) {
       value = parseFloat(node.NewFields.Balance) / 1000000.0;
       
       return {
         value    : value,
-        currency : 'STR',
+        currency : 'XPR',
         issuer   : '',
         type     : 'received',
         account  : node.NewFields.Account
@@ -172,7 +172,7 @@ function(doc) {
 
     //otherwise we should have a previous entry and a final
     //entry, and the balance change is the difference between them.
-    //this could be STR sent or received, and will include the
+    //this could be XPR sent or received, and will include the
     //transaction fee if this is the sending account
     } else if (node.FinalFields && node.PreviousFields) {
     
@@ -184,13 +184,13 @@ function(doc) {
       if (account==node.FinalFields.Account) balChange += fee;
       
       //if we still have a balance change, log it.  If it is negative,
-      //STR was sent from the account. Otherwise, it was received
+      //XPR was sent from the account. Otherwise, it was received
       if (balChange) {
         value = balChange<0 ? (0 - balChange) : balChange; //invert if negative  
         
         return {
           value    : parseFloat(value) / 1000000.0,
-          currency : 'STR',
+          currency : 'XPR',
           issuer   : '',
           type     : balChange<0 ? 'sent' : 'received', //sent if negative, else received
           account  : node.FinalFields.Account

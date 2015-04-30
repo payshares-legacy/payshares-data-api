@@ -44,7 +44,7 @@ function(doc) {
 
       var node = affNode.CreatedNode || affNode.ModifiedNode || affNode.DeletedNode;
 
-      // Look for STR balance change in AccountRoot node
+      // Look for XPR balance change in AccountRoot node
       if (node.LedgerEntryType === 'AccountRoot') {
 
         var strBalChange = parseAccountRootBalanceChange(node, account);
@@ -52,11 +52,11 @@ function(doc) {
         if (strBalChange) {
           strBalChange.value += parseFloat(tx.Fee); //remove the fee from the balance change
           
-          //if we are still negative, STR was sent.
+          //if we are still negative, XPR was sent.
           //often this would be zero, indicating only a fee
-          //and not really sending STR
+          //and not really sending XPR
           if (strBalChange.value<0) {
-            strBalChange.value = dropsToXrp(strBalChange.value); //convert to STR
+            strBalChange.value = dropsToXrp(strBalChange.value); //convert to XPR
             accountBalanceChanges.push(strBalChange);
           }
         }
@@ -86,7 +86,7 @@ function(doc) {
       if (node.NewFields.Account === account) {
         return {
           value: dropsToXrp(node.NewFields.Balance),
-          currency: 'STR',
+          currency: 'XPR',
           issuer: ''
         };
       }
@@ -103,7 +103,7 @@ function(doc) {
       //if the final balance is greater than the previous, str was sent
       if (balChange<0) return {
         value    : balChange,
-        currency : 'STR',
+        currency : 'XPR',
         issuer   : ''
       };
     }

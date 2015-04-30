@@ -3,12 +3,12 @@ var winston = require('winston'),
   _         = require('lodash'),
   tools     = require('../utils');
 
-function bitcoinStellarTrades(params, callback) {
+function bitcoinPaysharesTrades(params, callback) {
   viewOpts = {
     skip: Number(params.since) || 0
   };
 
-  db.view('bitcoinStellarTrades', 'v1', viewOpts, function(error, couchRes){
+  db.view('bitcoinPaysharesTrades', 'v1', viewOpts, function(error, couchRes){
     if (error) {
       return callback ('CouchDB - ' + error);
     }
@@ -19,4 +19,4 @@ function bitcoinStellarTrades(params, callback) {
   });
 }
 
-module.exports = bitcoinStellarTrades;
+module.exports = bitcoinPaysharesTrades;

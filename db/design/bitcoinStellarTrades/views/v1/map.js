@@ -29,7 +29,7 @@ function(doc) {
       }
 
       var involvesBTC = false;
-      var involvesSTR = false;
+      var involvesXPR = false;
   
       var exchangeRate = node.exchange_rate,
         counterparty   = node.FinalFields.Account,
@@ -43,10 +43,10 @@ function(doc) {
         payAmnt = node.PreviousFields.TakerPays.value - node.FinalFields.TakerPays.value;
         involvesBTC = involvesBTC || (node.PreviousFields.TakerPays.currency === 'BTC');
       } else {
-        payCurr = "STR";
+        payCurr = "XPR";
         payAmnt = (node.PreviousFields.TakerPays - node.FinalFields.TakerPays) / 1000000.0; // convert from drops
         exchangeRate = exchangeRate / 1000000.0;
-        involvesSTR = true;
+        involvesXPR = true;
       }
 
       if ( typeof node.PreviousFields.TakerGets === "object" ) {
@@ -54,17 +54,17 @@ function(doc) {
         getAmnt = node.PreviousFields.TakerGets.value - node.FinalFields.TakerGets.value;
         involvesBTC = involvesBTC || (node.PreviousFields.TakerGets.currency === 'BTC');
       } else {
-        getCurr = "STR";
+        getCurr = "XPR";
         getAmnt = (node.PreviousFields.TakerGets - node.FinalFields.TakerGets) / 1000000.0;
         exchangeRate = exchangeRate * 1000000.0;
-        involvesSTR = true;
+        involvesXPR = true;
       }
 
-      if(!involvesSTR || !involvesBTC) return;
+      if(!involvesXPR || !involvesBTC) return;
 
       var result = {date: unix};
       
-      if(getCurr === 'STR') {
+      if(getCurr === 'XPR') {
         result.price = 1 / exchangeRate;
         result.amount = payAmnt;
       } else {

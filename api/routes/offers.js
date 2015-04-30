@@ -1,6 +1,6 @@
 var winston = require('winston'),
   moment    = require('moment'),
-  stellar    = require('stellar-lib'),
+  payshares    = require('payshares-lib'),
   _         = require('lodash'),
   tools     = require('../utils');
 
@@ -11,7 +11,7 @@ var winston = require('winston'),
  * 
  * 
    curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "STR"},
+    "base"  : {"currency": "XPR"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Feb 10, 2014 4:44:00 am",
     "endTime"   : "Feb 11, 2014 5:09:00 am",
@@ -22,7 +22,7 @@ var winston = require('winston'),
     
 
    curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "STR"},
+    "base"  : {"currency": "XPR"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Feb 10, 2014 4:44:00 am",
     "endTime"   : "Feb 11, 2014 5:09:00 am",
@@ -32,7 +32,7 @@ var winston = require('winston'),
     }' http://localhost:5993/api/offers
 
    curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "STR"},
+    "base"  : {"currency": "XPR"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Feb 10, 2014 4:44:00 am",
     "endTime"   : "Apr 16, 2014 5:09:00 am",
@@ -154,14 +154,14 @@ function offers (params, callback) {
       
     } else if (!params.base.issuer) {
       
-      if (params.base.currency.toUpperCase() === 'STR') {
-        options.base = 'STR';
+      if (params.base.currency.toUpperCase() === 'XPR') {
+        options.base = 'XPR';
       } else {
-        options.error = 'must specify issuer for all currencies other than STR';
+        options.error = 'must specify issuer for all currencies other than XPR';
         return;
       }
       
-    } else if (params.base.issuer && stellar.UInt160.is_valid(params.base.issuer)) {
+    } else if (params.base.issuer && payshares.UInt160.is_valid(params.base.issuer)) {
       options.base = params.base.currency.toUpperCase()+"."+params.base.issuer;
       
     } else {
@@ -181,13 +181,13 @@ function offers (params, callback) {
       return;
       
     } else if (!params.counter.issuer) {
-      if (params.counter.currency.toUpperCase()  === 'STR') {
-        options.counter = 'STR';
+      if (params.counter.currency.toUpperCase()  === 'XPR') {
+        options.counter = 'XPR';
       } else {
-        options.error = 'must specify issuer for all currencies other than STR';
+        options.error = 'must specify issuer for all currencies other than XPR';
         return;
       }
-    } else if (params.counter.issuer && stellar.UInt160.is_valid(params.counter.issuer)) {
+    } else if (params.counter.issuer && payshares.UInt160.is_valid(params.counter.issuer)) {
       options.counter = params.counter.currency.toUpperCase()+"."+params.counter.issuer;
       
     } else {

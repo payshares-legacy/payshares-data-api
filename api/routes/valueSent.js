@@ -9,7 +9,7 @@ var winston = require('winston'),
  * 
  * request: {
  *
- *  currency   : ("STR", "USD", etc.)     //required
+ *  currency   : ("XPR", "USD", etc.)     //required
  *  issuer     : ("bitstamp", "rxSza...") //required
  *    
  *  startTime     : // range start date + time
@@ -82,7 +82,7 @@ var winston = require('winston'),
 
 
  curl -H "Content-Type: application/json" -X POST -d '{
-      "currency"  : "STR",
+      "currency"  : "XPR",
       "startTime" : "Mar 14, 2014 5:00 pm",
       "endTime"   : "Mar 17, 2014 5:00 pm",
       "format"    : "csv"
@@ -98,7 +98,7 @@ var winston = require('winston'),
     }' http://localhost:5993/api/valueSent   
     
   curl -H "Content-Type: application/json" -X POST -d '{
-      "currency"  : "STR",
+      "currency"  : "XPR",
       "startTime" : "Mar 15, 2014 10:00 am",
       "endTime"   : "Mar 16, 2014 10:00 am"
       
@@ -123,7 +123,7 @@ function valueSent(params, callback) {
   var issuer   = params.issuer   ? params.issuer : "";
    
   if (!currency)                    return callback("currency is required");
-  if (currency != "STR" && !issuer) return callback("issuer is required");
+  if (currency != "XPR" && !issuer) return callback("issuer is required");
 
     
   //Parse start and end times

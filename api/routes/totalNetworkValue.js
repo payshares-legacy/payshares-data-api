@@ -1,21 +1,21 @@
 var winston = require('winston'),
   moment    = require('moment'),
   _         = require('lodash'),
-  stellar    = require('stellar-lib'),
+  payshares    = require('payshares-lib'),
   async     = require('async');
 /**
  *  totalNetworkValue: 
  * 
- *  total value of currencies for the top gateways on the stellar network, 
+ *  total value of currencies for the top gateways on the payshares network, 
  *  normalized to a specific currrency.
  *
  *  request : 
  *
  * {
  *    time : "2014-03-13T20:39:26+00:00"      //time of desired snapshot
- *    exchange  : {                           // optional, defaults to STR
- *      currency  : (STR, USD, BTC, etc.),         
- *      issuer    : "rAusZ...."               // optional, required if currency != STR
+ *    exchange  : {                           // optional, defaults to XPR
+ *      currency  : (XPR, USD, BTC, etc.),         
+ *      issuer    : "rAusZ...."               // optional, required if currency != XPR
  *    }
  * }
  *
@@ -62,15 +62,15 @@ var winston = require('winston'),
 function totalNetworkValue(params, callback) {
 
   var cacheKey, viewOpts = {};
-  var ex = params.exchange || {currency:"STR"};
+  var ex = params.exchange || {currency:"XPR"};
   
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "STR" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "XPR" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "STR" && ex.issuer)
-    return callback('STR cannot have an issuer');
+  else if (ex.currency == "XPR" && ex.issuer)
+    return callback('XPR cannot have an issuer');
  
  
   //all currencies we are going to check    
@@ -85,12 +85,12 @@ function totalNetworkValue(params, callback) {
   var conversionPairs = [];
   currencies.forEach(function(currency) {
     
-    if (currency.currency == 'STR') {
+    if (currency.currency == 'XPR') {
       return;
     }
 
     conversionPairs.push({
-      base    : {currency: 'STR'},
+      base    : {currency: 'XPR'},
       counter : currency
     });
   });
@@ -142,7 +142,7 @@ function totalNetworkValue(params, callback) {
       getExchangeRates(time, conversionPairs, function(error, rates){
         if (error) return callback(error);
         
-        var finalRate = ex.currency == "STR" ? 1 : null;
+        var finalRate = ex.currency == "XPR" ? 1 : null;
         
         rates.forEach(function(pair, index){
           currencies[index].rate            = pair.rate; 
@@ -154,11 +154,11 @@ function totalNetworkValue(params, callback) {
               pair.counter.issuer   == ex.issuer) finalRate = pair.rate;
         });
         
-        getSTRbalance(function(error, balance){
+        getXPRbalance(function(error, balance){
           if (error) return callback(error);
           
           currencies.push({
-            currency : "STR",
+            currency : "XPR",
             amount   : balance
           })
           
@@ -183,8 +183,8 @@ function totalNetworkValue(params, callback) {
           var total = 0, count = 0;
           currencies.forEach(function(currency, index) {
   
-            if (currency.currency == "STR") {
-              currency.rate            = 1; //for STR
+            if (currency.currency == "XPR") {
+              currency.rate            = 1; //for XPR
               currency.convertedAmount = currency.amount;
             }
             
@@ -246,14 +246,14 @@ function totalNetworkValue(params, callback) {
   
   
   /*
-   * get STR to specified currency conversion
+   * get XPR to specified currency conversion
    * 
    */
   function getConversion (params, callback) {
     
     // Mimic calling offersExercised 
     require("./offersExercised")({
-        base      : {currency:"STR"},
+        base      : {currency:"XPR"},
         counter   : {currency:params.currency,issuer:params.issuer},
         startTime : params.startTime,
         endTime   : params.endTime,
@@ -274,7 +274,7 @@ function totalNetworkValue(params, callback) {
   *  getLatestLedgerSaved gets the ledger with the highest
   *  index saved in CouchDB
   */  
-  function getSTRbalance(callback) {
+  function getXPRbalance(callback) {
     db.list({descending:true, startkey:'_c', limit: 1}, function(error, res){
       if (error) return callback("CouchDB - " + error);  
       if (!res.rows.length) return callback("no ledgers saved"); //no ledgers saved;

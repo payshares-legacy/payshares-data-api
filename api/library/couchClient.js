@@ -14,12 +14,12 @@ function init (url) {
     } 
     
     tags = ["view:"+doc+"/"+view, "node_env:"+env];
-    datadog.increment('stellar_data_api.couchDB_requests', null, tags);
+    datadog.increment('payshares_data_api.couchDB_requests', null, tags);
     return client.parentView(doc, view, options, function(error, response){
       d = (Date.now()-d)/1000;
       if (DEBUG) winston.info("CouchDB - "+doc+"/"+view, label, d+"s");
       
-      datadog.histogram('stellar_data_api.couchDB_responseTime', d, null, tags);    
+      datadog.histogram('payshares_data_api.couchDB_responseTime', d, null, tags);    
       callback(error, response);
     });
   }

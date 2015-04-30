@@ -1,14 +1,14 @@
 var winston = require('winston'),
   moment    = require('moment'),
   _         = require('lodash'),
-  stellar    = require('stellar-lib'),
+  payshares    = require('payshares-lib'),
   async     = require('async');
 
 
 /**
  *  topMarkets: 
  * 
- *  the total trading volume for the top markets on the stellar network 
+ *  the total trading volume for the top markets on the payshares network 
  *  for a given time period, normalized USD. Returns data for the last 24 hours 
  *  if no arguments are given.
  *
@@ -17,9 +17,9 @@ var winston = require('winston'),
  * {
  *    startTime : (any momentjs-readable date), // optional, defaults to 1 day before end time
  *    endTime   : (any momentjs-readable date), // optional, defaults to now
- *    exchange  : {                             // optional, defaults to STR
- *      currency  : (STR, USD, BTC, etc.),         
- *      issuer    : "rAusZ...."                 // optional, required if currency != STR
+ *    exchange  : {                             // optional, defaults to XPR
+ *      currency  : (XPR, USD, BTC, etc.),         
+ *      issuer    : "rAusZ...."                 // optional, required if currency != XPR
  *    }
  *  }
  *
@@ -28,14 +28,14 @@ var winston = require('winston'),
  * { 
  *    startTime    : '2014-03-13T20:26:24+00:00',   //period start
  *    endTime      : '2014-03-14T20:26:24+00:00',   //period end
- *    exchange     : { currency: 'STR' },           //requested exchange currency
- *    exchangeRate : 1,                             //STR exchange rate of requested currency
+ *    exchange     : { currency: 'XPR' },           //requested exchange currency
+ *    exchangeRate : 1,                             //XPR exchange rate of requested currency
  *    total        : 1431068.4284775178,            //total volume in requested currency
  *    count        : 627,                           //number of trades
  *    components   : [                              //list of component markets
  *      { 
  *        base            : {"currency":"USD","issuer":"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
- *        counter         : {"currency":"STR"},
+ *        counter         : {"currency":"XPR"},
  *        rate            : 69.9309953931345,
  *        count           : 99,
  *        amount          : 3107.9273091242917,
@@ -64,23 +64,23 @@ var winston = require('winston'),
 function topMarkets(params, callback) {
 
   var cacheKey, viewOpts = {};
-  var ex = params.exchange || {currency:"STR"};
+  var ex = params.exchange || {currency:"XPR"};
   
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "STR" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "XPR" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "STR" && ex.issuer)
-    return callback('STR cannot have an issuer');
+  else if (ex.currency == "XPR" && ex.issuer)
+    return callback('XPR cannot have an issuer');
 
-  //these must be traded in terms of STR - perhaps we can change this later
+  //these must be traded in terms of XPR - perhaps we can change this later
   var marketPairs = _(gatewayList).map(function(gateway) {
     return _.map(gateway.accounts, function(account) {
       return _.map(account.currencies, function(currency) {
         return {
           base: {currency: currency, issuer: account.address},
-          counter: {currency: 'STR'}
+          counter: {currency: 'XPR'}
         };
       });
     });
@@ -198,24 +198,24 @@ function topMarkets(params, callback) {
       var exchangeRate;
       var rates = { };
       
-      //get rates vs STR
+      //get rates vs XPR
       pairs.forEach(function(pair, index) {
-        if (pair.counter.currency === 'STR') {
+        if (pair.counter.currency === 'XPR') {
           rates[pair.base.currency + "." + pair.base.issuer] = pair.rate;
         }
       });
       
       
       
-      if (ex.currency == 'STR') { 
+      if (ex.currency == 'XPR') { 
         exchangeRate = 1;
       } else if (rates[ex.currency + '.' + ex.issuer]) {
         exchangeRate = 1 / rates[ex.currency + '.' + ex.issuer];
       } 
       
-      //convert non - STR to STR value
+      //convert non - XPR to XPR value
       pairs.forEach(function(pair, index) {
-        if (pair.counter.currency !== 'STR') {
+        if (pair.counter.currency !== 'XPR') {
           pair.rate = rates[pair.base.currency + "." + pair.base.issuer];
         }  
       })
@@ -260,14 +260,14 @@ function topMarkets(params, callback) {
 
 
   /*
-   * get STR to specified currency conversion
+   * get XPR to specified currency conversion
    * 
    */
   function getConversion (params, callback) {
     
     // Mimic calling offersExercised 
     require("./offersExercised")({
-      base      : {currency:"STR"},
+      base      : {currency:"XPR"},
       counter     : {currency:params.currency,issuer:params.issuer},
       startTime : params.startTime,
       endTime   : params.endTime,

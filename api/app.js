@@ -89,13 +89,13 @@ app.post('/api/*', requestHandler);
 app.listen(config.port);
 winston.info('Listening on port ' + config.port);
 
-// Returns BTC/STR trades from any issuer.
+// Returns BTC/XPR trades from any issuer.
 // Swollow errors and report an empty trade set.
-var bitcoinStellarTrades = require('./routes/bitcoinStellarTrades');
-app.get('/api/BTC/STR/trades', function(req, res) {
-  bitcoinStellarTrades(req.query, function(err, response) {
+var bitcoinPaysharesTrades = require('./routes/bitcoinPaysharesTrades');
+app.get('/api/BTC/XPR/trades', function(req, res) {
+  bitcoinPaysharesTrades(req.query, function(err, response) {
     if(err) {
-      winston.error(err, " - /api/BTC/STR/trades", "(Spoof empty trade set) 200");
+      winston.error(err, " - /api/BTC/XPR/trades", "(Spoof empty trade set) 200");
       res.send(200, []);
       return;
     }
@@ -105,13 +105,13 @@ app.get('/api/BTC/STR/trades', function(req, res) {
 });
 
 // Set required ETag for orderbook requests to a constant value.
-app.head('/api/BTC/STR/orderbook', function(req, res) {
+app.head('/api/BTC/XPR/orderbook', function(req, res) {
   res.set('ETag', 'not-supported');
   res.send(200);
 });
 
 // Returns an empty order book, since orderbooks require an issuer.
-app.get('/api/BTC/STR/orderbook', function(req, res) {
+app.get('/api/BTC/XPR/orderbook', function(req, res) {
   res.set('ETag', 'not-supported');
   res.send(200, {bids: [], asks: []});
 });
@@ -212,13 +212,13 @@ if (CACHE) {
     //reset cache if the arg is present
     if (process.argv.indexOf('reset-cache') !== -1) redis.flushdb();
 /*    
-    redis.del("TVS:STR:live:86400", function(err, res){
+    redis.del("TVS:XPR:live:86400", function(err, res){
     });
     
-    redis.del("TM:STR:live:86400", function(err, res){
+    redis.del("TM:XPR:live:86400", function(err, res){
     });
     
-    redis.del("TNV:STR:live", function(err, res){
+    redis.del("TNV:XPR:live", function(err, res){
     });    
 */  
     redis.on("error", function (err) {

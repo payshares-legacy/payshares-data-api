@@ -6,7 +6,7 @@ var winston = require('winston'),
 /*
  * accountTransactionStats:
  * 
- * breakdown of valid transactions by type for a specified account on the stellar network over time.
+ * breakdown of valid transactions by type for a specified account on the payshares network over time.
  *
  * request:
  *

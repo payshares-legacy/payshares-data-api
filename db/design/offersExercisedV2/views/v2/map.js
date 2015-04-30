@@ -39,7 +39,7 @@ function(doc) {
         payCurr = node.PreviousFields.TakerPays.currency+"."+node.PreviousFields.TakerPays.issuer;
         payAmnt = node.PreviousFields.TakerPays.value - node.FinalFields.TakerPays.value;
       } else {
-        payCurr = "STR";
+        payCurr = "XPR";
         payAmnt = (node.PreviousFields.TakerPays - node.FinalFields.TakerPays) / 1000000.0; // convert from drops
         exchangeRate = exchangeRate / 1000000.0;
       }
@@ -48,7 +48,7 @@ function(doc) {
         getCurr = node.PreviousFields.TakerGets.currency+"."+node.PreviousFields.TakerGets.issuer;
         getAmnt = node.PreviousFields.TakerGets.value - node.FinalFields.TakerGets.value;
       } else {
-        getCurr = "STR";
+        getCurr = "XPR";
         getAmnt = (node.PreviousFields.TakerGets - node.FinalFields.TakerGets) / 1000000.0;
         exchangeRate = exchangeRate * 1000000.0;
       }

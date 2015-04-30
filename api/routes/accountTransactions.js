@@ -11,7 +11,7 @@ var winston = require('winston'),
  * 
  *  expects params to have:
  *  {
- *    account: //stellar address of the account to query
+ *    account: //payshares address of the account to query
  *    startTime: (any momentjs-readable date), // optional, defaults to 30 days before endTime
  *    endTime: (any momentjs-readable date), // optional, defaults to now
  *    descending: true/false, // optional, defaults to true
@@ -60,7 +60,7 @@ function accountTransactions(params, callback, unlimit) {
     maxLimit  = unlimit ? Infinity : 500,
     viewOpts  = {};
 
-  if (!account) return callback("please provide a valid stellar account");
+  if (!account) return callback("please provide a valid payshares account");
   if (!limit || limit>maxLimit) limit = maxLimit === Infinity ? null : maxLimit;
   
   //Parse start and end times
@@ -111,7 +111,7 @@ function accountTransactions(params, callback, unlimit) {
         //value[3] = amount
         //value[4] = counterparty
         
-        if (value[0]=='STR') {
+        if (value[0]=='XPR') {
           if (!stats[value[0]])           stats[value[0]] = {};
           if (!stats[value[0]][value[2]]) stats[value[0]][value[2]] = {amount:0, count:0};
           stats[value[0]][value[2]]['amount'] += value[3];

@@ -41,7 +41,7 @@ function( doc ) {
         getCurr = fields.TakerGets.currency+"."+fields.TakerGets.issuer;
         getAmnt = parseFloat(fields.TakerGets.value, 10);
       } else {
-        getCurr = "STR";
+        getCurr = "XPR";
         getAmnt = fields.TakerGets / 1000000.0;
         exchangeRate = exchangeRate * 1000000.0;
       }
@@ -50,7 +50,7 @@ function( doc ) {
         payCurr = fields.TakerPays.currency+"."+fields.TakerPays.issuer;
         payAmnt = parseFloat(fields.TakerPays.value, 10);
       } else {
-        payCurr = "STR";
+        payCurr = "XPR";
         payAmnt = fields.TakerPays / 1000000.0;
         exchangeRate = exchangeRate / 1000000.0;
       }

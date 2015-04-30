@@ -1,6 +1,6 @@
 var winston = require('winston'),
   moment    = require('moment'),
-  stellar    = require('stellar-lib'),
+  payshares    = require('payshares-lib'),
   _         = require('lodash'),
   tools     = require('../utils');
 
@@ -10,7 +10,7 @@ var winston = require('winston'),
  *
  *  expects params to have:
  *  {
- *    base: {currency: "STR"},
+ *    base: {currency: "XPR"},
  *    counter: {currency: "USD", issuer: "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
  *    
  *    descending: true/false, // optional, defaults to true
@@ -48,7 +48,7 @@ var winston = require('winston'),
     }' http://localhost:5993/api/offersExercised    
 
   curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "STR"},
+    "base"  : {"currency": "XPR"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Mar 10, 2014 4:35 am",
     "endTime"   : "Mar 11, 2014 5:10:30 am",
@@ -60,7 +60,7 @@ var winston = require('winston'),
  
  
   curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "STR"},
+    "base"  : {"currency": "XPR"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Mar 11, 2014 4:44:00 am",
     "endTime"   : "Mar 12, 2014 5:09:00 am",
@@ -72,7 +72,7 @@ var winston = require('winston'),
  
   curl -H "Content-Type: application/json" -X POST -d '{
     "base"  : {"currency": "BTC", "issuer" : "rNPRNzBB92BVpAhhZr4iXDTveCgV5Pofm9"},
-    "counter" : {"currency": "STR"},
+    "counter" : {"currency": "XPR"},
     "startTime" : "Apr 7, 2014 4:44:00 am",
     "endTime"   : "Apr 11, 2014 5:09:00 am",
     "reduce"    : false,
@@ -591,14 +591,14 @@ function offersExercised (params, callback, unlimit) {
       
     } else if (!params.base.issuer) {
       
-      if (params.base.currency.toUpperCase() === 'STR') {
-        options.base = 'STR';
+      if (params.base.currency.toUpperCase() === 'XPR') {
+        options.base = 'XPR';
       } else {
-        options.error = 'must specify issuer for all currencies other than STR';
+        options.error = 'must specify issuer for all currencies other than XPR';
         return;
       }
       
-    } else if (params.base.issuer && stellar.UInt160.is_valid(params.base.issuer)) {
+    } else if (params.base.issuer && payshares.UInt160.is_valid(params.base.issuer)) {
       options.base = params.base.currency.toUpperCase()+"."+params.base.issuer;
       
     } else {
@@ -618,13 +618,13 @@ function offersExercised (params, callback, unlimit) {
       return;
       
     } else if (!params.counter.issuer) {
-      if (params.counter.currency.toUpperCase()  === 'STR') {
-        options.counter = 'STR';
+      if (params.counter.currency.toUpperCase()  === 'XPR') {
+        options.counter = 'XPR';
       } else {
-        options.error = 'must specify issuer for all currencies other than STR';
+        options.error = 'must specify issuer for all currencies other than XPR';
         return;
       }
-    } else if (params.counter.issuer && stellar.UInt160.is_valid(params.counter.issuer)) {
+    } else if (params.counter.issuer && payshares.UInt160.is_valid(params.counter.issuer)) {
       options.counter = params.counter.currency.toUpperCase()+"."+params.counter.issuer;
       
     } else {
@@ -720,8 +720,8 @@ function offersExercised (params, callback, unlimit) {
    * @param {Object} rows
    */
   function handleInterest (rows) {
-    var base    = stellar.Currency.from_json(params.base.currency);
-    var counter = stellar.Currency.from_json(params.counter.currency);
+    var base    = payshares.Currency.from_json(params.base.currency);
+    var counter = payshares.Currency.from_json(params.counter.currency);
     
     
     if (base.has_interest()) {
@@ -730,7 +730,7 @@ function offersExercised (params, callback, unlimit) {
           if (!i) return;
         
           //apply interest to the base amount
-          amount = stellar.Amount.from_human(row[2] + " " + params.base.currency).applyInterest(new Date(row[0])).to_human(); 
+          amount = payshares.Amount.from_human(row[2] + " " + params.base.currency).applyInterest(new Date(row[0])).to_human(); 
           pct   = row[2]/amount; 
           
           rows[i][2]  = amount;
@@ -742,7 +742,7 @@ function offersExercised (params, callback, unlimit) {
           if (!i) return;
           
           //apply interest to the base volume
-          value = stellar.Amount.from_human(row[1] + " " + params.base.currency).applyInterest(new Date(row[0])).to_human(); 
+          value = payshares.Amount.from_human(row[1] + " " + params.base.currency).applyInterest(new Date(row[0])).to_human(); 
           pct   = row[1]/value;
           
           //adjust the prices
@@ -760,7 +760,7 @@ function offersExercised (params, callback, unlimit) {
           if (!i) return;
           
           //apply interest to the counter amount
-          amount = stellar.Amount.from_human(row[3] + " " + params.counter.currency).applyInterest(new Date(row[0])).to_human(); 
+          amount = payshares.Amount.from_human(row[3] + " " + params.counter.currency).applyInterest(new Date(row[0])).to_human(); 
           pct   = amount/row[3]; 
           
           rows[i][3]  = amount;
@@ -772,7 +772,7 @@ function offersExercised (params, callback, unlimit) {
           if (!i) return;
           
           //apply interest to the counter volume
-          value = stellar.Amount.from_human(row[2] + " " + params.counter.currency).applyInterest(new Date(row[0])).to_human(); 
+          value = payshares.Amount.from_human(row[2] + " " + params.counter.currency).applyInterest(new Date(row[0])).to_human(); 
           pct   = value/row[2];
           
           //adjust the prices

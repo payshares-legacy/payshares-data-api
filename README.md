@@ -1,10 +1,10 @@
-# Stellar Data API
-The Stellar data API is the end point for stellar-charts-frontend and other applications that need historical data.  This API is built on Node.js, CouchDB, and Redis.
+# Payshares Data API
+The Payshares data API is the end point for payshares-charts-frontend and other applications that need historical data.  This API is built on Node.js, CouchDB, and Redis.
 
 ## Components
 
 ### Ledger Importer
-The ledger importer imports ledgers from the Stellar Network into the data store.  The process is set up to import continously in real time as ledgers are validated, as well as import historical ledgers.
+The ledger importer imports ledgers from the Payshares Network into the data store.  The process is set up to import continously in real time as ledgers are validated, as well as import historical ledgers.
 
 ### Data Store
 The data store uses CouchDB to store ledgers as a JSON document.  To retrieve structured data from the ledgers, "views" have been created which index specific elements from the ledger into a format that can be queried efficiently.  For example, one view collects all successful transactions that exercise offers and indexes them according to the currencies, issuers, and date, and returns the amounts and prices of the exercised offers.  We can then query this view and group the indexed results by time increments to get an array of offers excercised over time for a given pair of currencies.
@@ -20,8 +20,8 @@ To reduce the load on CouchDB, the API server contains a cacheing layer.  The ca
   + install couchDB or get hosted couchDB service and create new a database 
   + install redis (optional)
 ```  
-    git clone https://github.com/stellar/stellar-data-api.git
-    cd stellar-data-api
+    git clone https://github.com/payshares/payshares-data-api.git
+    cd payshares-data-api
     npm install
     cp db.config.json.example db.config.json
     cp deployment.environments.json.example deployment.environments.json
@@ -58,7 +58,7 @@ Exchange offers exercised over time - returns volume in terms of base and counte
 + Request (json)
 
         {    
-            base : {currency: "STR"},
+            base : {currency: "XPR"},
             counter : {currency: "USD", issuer: "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"},
             startTime : "2014-03-11",
             endTime : "2014-03-12",
@@ -134,7 +134,7 @@ Exchange offers exercised over time - returns volume in terms of base and counte
             startTime : "2014-03-11T11:44:00+00:00",
             endTime   : "2014-03-12T12:09:00+00:00",
             base      : {
-                currency : "STR"
+                currency : "XPR"
             },
             counter : {
                 currency : "USD",
@@ -179,7 +179,7 @@ The amount of value sent from all accounts for a specific currency over time.
 #### POST
 
 + Parameters
-    + currency (string) ... "STR", "USD", etc.
+    + currency (string) ... "XPR", "USD", etc.
     + issuer   (string) ... "rvYAfWj5gh67oV6f..." 
     + startTime (string) ... any momentjs-readable date
     + endTime (string) ... any momentjs-readable date
@@ -327,7 +327,7 @@ Returns the total capitalization (outstanding balance) of a specified issuer & s
             ] 
 
 ### accounts_created [/accounts_created{startTime}{endTime}{timeIncrement}{descending}{reduce}{limit}{offset}{format}]
-The number of stellar accounts that have been created over time.
+The number of payshares accounts that have been created over time.
 
 + Max returned results : 500
 
@@ -418,7 +418,7 @@ The number of stellar accounts that have been created over time.
         ...
 
 ### transaction_stats [/transaction_stats{startTime}{endTime}{timeIncrement}{descending}{reduce}{limit}{offset}{format}]
-Breakdown of valid transactions by type on the stellar network over time.
+Breakdown of valid transactions by type on the payshares network over time.
 
 #### POST
 
@@ -515,7 +515,7 @@ The exchange rates between two currencies for a given time period.  Returns the 
             pairs : [
                 {
                     base    : {currency:"CNY","issuer":"rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK"},
-                    counter : {currency:"STR"}
+                    counter : {currency:"XPR"}
                 }
             ],
             range : "day"
@@ -536,10 +536,10 @@ The exchange rates between two currencies for a given time period.  Returns the 
                     base    : {
                         currency : "CNY", 
                         issuer   : "rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK",
-                        name     : "stellarCN"
+                        name     : "paysharesCN"
                     },
                     counter : {
-                        currency : "STR"
+                        currency : "XPR"
                     },
                     rate    : .5412
                     last    : .5405
@@ -550,12 +550,12 @@ The exchange rates between two currencies for a given time period.  Returns the 
             }
 
 ### market_traders [/market_traders{base}{counter}{range}{startTime}{format}]
-Returns a list of accounts that participated in trading the specified trading pair during the specified time range, ordered by base currency volume.  If no trading pair is provided, the API uses a list of the top STR markets
+Returns a list of accounts that participated in trading the specified trading pair during the specified time range, ordered by base currency volume.  If no trading pair is provided, the API uses a list of the top XPR markets
 
 #### POST
 
 + Parameters
-    + base (JSON, optional) ... base currency-issuer. If not present, top STR markets are queried
+    + base (JSON, optional) ... base currency-issuer. If not present, top XPR markets are queried
     + counter  (JSON, optional) ... counter currency-issuer. Required if base is present
     + range (string, optional) ... Any of the following ("24hr", "3d", "7d")
     + startTime (string, optional) ... moment.js readable date string
@@ -565,7 +565,7 @@ Returns a list of accounts that participated in trading the specified trading pa
 
         {
             base : {
-                currency : "STR"
+                currency : "XPR"
             },
             counter : {
                 currency : "USD",
@@ -619,13 +619,13 @@ Returns a list of accounts that participated in trading the specified trading pa
         ...
         
 ### total_network_value [/total_network_value{time}{exchange}]
-Total value of currencies for the top gateways on the stellar network, normalized to a specified currrency.
+Total value of currencies for the top gateways on the payshares network, normalized to a specified currrency.
 
 #### POST
 
 + Parameters
     + time (string) ... any momentjs-readable date.  The time of desired snapshot
-    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to STR
+    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to XPR
 
 + Request (json)
 
@@ -670,14 +670,14 @@ Total value of currencies for the top gateways on the stellar network, normalize
             }
 
 ### top_markets [/top_markets{startTime}{endTime}{exchange}]
-The total trading volume for the top 5 markets on the stellar network for a given time period, normalized USD.  Returns data for the last 24 hours if no arguments are given.
+The total trading volume for the top 5 markets on the payshares network for a given time period, normalized USD.  Returns data for the last 24 hours if no arguments are given.
 
 #### POST  
 
 + Parameters 
     + startTime (string, optional) ... any momentjs-readable date, defaults to 1 day before end time
     + endTime (string, optional) ... any momentjs-readable date, defaults to now
-    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to STR
+    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to XPR
  
 + Request (json)
 
@@ -695,7 +695,7 @@ The total trading volume for the top 5 markets on the stellar network for a give
         { 
             startTime    : '2014-03-13T20:26:24+00:00',
             endTime      : '2014-03-14T20:26:24+00:00',
-            exchange     : { currency: 'STR' },
+            exchange     : { currency: 'XPR' },
             exchangeRate : 1,                 
             total        : 1431068.4284775178,
             count        : 627,
@@ -706,7 +706,7 @@ The total trading volume for the top 5 markets on the stellar network for a give
                         issuer:"gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
                     },
                     counter : {
-                        currency:"STR"
+                        currency:"XPR"
                     },
                     rate            : 69.9309953931345,
                     count           : 99,
@@ -720,14 +720,14 @@ The total trading volume for the top 5 markets on the stellar network for a give
         } 
 
 ### total_value_sent [/total_value_sent{startTime}{endTime}{exchange}]
-The total of amounts sent or exchanged from any wallet, either through a payment or an "offerCreate" that exercises another offer, for a curated list of currency/issuers and STR, normalized to a specified currency
+The total of amounts sent or exchanged from any wallet, either through a payment or an "offerCreate" that exercises another offer, for a curated list of currency/issuers and XPR, normalized to a specified currency
 
 #### POST  
 
 + Parameters 
     + startTime (string, optional) ... any momentjs-readable date, defaults to 1 day before end time
     + endTime (string, optional) ... any momentjs-readable date, defaults to now
-    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to STR
+    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to XPR
  
 + Request (json)
 
@@ -776,7 +776,7 @@ Returns a list of offers excercised for a given account. Providing a time increm
 #### POST
 
 + Parameters 
-    + account (string) ... valid stellar address
+    + account (string) ... valid payshares address
     + startTime (string, optional) ... any momentjs-readable date, defaults to 30 days before endTime
     + endTime (string, optional) ... any momentjs-readable date, defaults to now
     + descending (boolean, optional) ... defaults to false
@@ -814,7 +814,7 @@ Returns a list of offers excercised for a given account. Providing a time increm
                 "USD",
                 "r4cgRZUJs7sA....",
                 0.4999999999999929,
-                "STR",
+                "XPR",
                 null,
                 37.5,
                 "buy",
@@ -843,7 +843,7 @@ Returns a list of offers excercised for a given account. Providing a time increm
                         amount   : 0.4999999999999929
                     },
                     counter : {
-                        currency : "STR",
+                        currency : "XPR",
                         issuer   : null,
                         amount   : 37.5
                     },
@@ -863,8 +863,8 @@ Returns a list of offers excercised for a given account. Providing a time increm
 + Response 200 (text/csv)
     
         baseCurrency, baseIssuer, baseAmount, counterCurrency, counterIssuer, counterAmount, type, rate, counterparty, time, txHash, ledgerIndex
-        USD, r4cgRZUJs7sAX..., 0.499999, STR, , 37.5, buy, 0.0133, rn9dcbUdqY..., 2013-06-25T18:38:30+00:00, DB5620CB7FAA1ADE6FD2E6...., 1137051
-        STR, , 40.16, USD, r4cgRZUJs7sA..., 0.502, buy, 80, rn9dcbUdqY..., 2013-06-25T18:41:10+00:00, DB5620CB7FAA1ADE6FD2E6...., 1137069
+        USD, r4cgRZUJs7sAX..., 0.499999, XPR, , 37.5, buy, 0.0133, rn9dcbUdqY..., 2013-06-25T18:38:30+00:00, DB5620CB7FAA1ADE6FD2E6...., 1137051
+        XPR, , 40.16, USD, r4cgRZUJs7sA..., 0.502, buy, 80, rn9dcbUdqY..., 2013-06-25T18:41:10+00:00, DB5620CB7FAA1ADE6FD2E6...., 1137069
         ...
         ...
         ...
@@ -878,7 +878,7 @@ Returns a list of transactions in which the specified account sent or received a
 #### POST  
 
 + Parameters 
-    + account (string) ... valid stellar address
+    + account (string) ... valid payshares address
     + startTime (string, optional) ... any momentjs-readable date, defaults to 30 days before endTime
     + endTime (string, optional) ... any momentjs-readable date, defaults to now
     + descending (boolean, optional) ... defaults to false
@@ -901,7 +901,7 @@ Returns a list of transactions in which the specified account sent or received a
         [
             ["currency","issuer","type","amount","counterparty","time","txHash","ledgerIndex"],
             [
-                "STR",
+                "XPR",
                 "",
                 "received",
                 0.01,
@@ -922,7 +922,7 @@ Returns a list of transactions in which the specified account sent or received a
             startTime : "2015-01-10T18:00:00+00:00",
             endTime   : "2014-01-01T18:00:00+00:00",
             summary   : {
-                "STR" : {
+                "XPR" : {
                     received: {
                         amount : 1465.35985, 
                         count  : 10
@@ -931,7 +931,7 @@ Returns a list of transactions in which the specified account sent or received a
             },
             transactions : [
                 {
-                    currency     : "STR",
+                    currency     : "XPR",
                     issuer       : "",
                     type         : "received",
                     amount       : 0.01,
@@ -949,21 +949,21 @@ Returns a list of transactions in which the specified account sent or received a
 + Response 200 (text/csv)
     
         currency, issuer, type, amount, counterparty, time, txHash, ledgerIndex
-        STR, , received, 0.01, rHaaB.., 2014-04-08T09:50:30+00:00, 3F05E56E..., 5960292
-        STR, , received, 250, r9Toy.., 2014-04-05T15:35:00+00:00, 0F1A2B0..., 5913459
+        XPR, , received, 0.01, rHaaB.., 2014-04-08T09:50:30+00:00, 3F05E56E..., 5960292
+        XPR, , received, 250, r9Toy.., 2014-04-05T15:35:00+00:00, 0F1A2B0..., 5913459
         ...
         ...
         ...
 
 ### account_transaction_stats [/account_transaction_stats{account}{startTime}{endTime}{timeIncrement}{descending}{reduce}{limit}{offset}{format}]
-Breakdown of valid transactions by type for a specified account on the stellar network over time.
+Breakdown of valid transactions by type for a specified account on the payshares network over time.
 
 + Max returned results : 500
 
 #### POST
 
 + Parameters 
-    + account (string) ... valid stellar address
+    + account (string) ... valid payshares address
     + startTime (string, optional) ... any momentjs-readable date, defaults to 30 days before endTime
     + endTime (string, optional) ... any momentjs-readable date, defaults to now
     + timeIncrement (string, optional) ... any of the following: "all", "none", "year", "month", "day", "hour", "minute", "second" - defaults to "day"
@@ -1152,7 +1152,7 @@ Returns all offer creates and cancels over time for a given trading pair.
 
         {
             base    : {
-                currency : "STR"
+                currency : "XPR"
             },
             counter : {
                 currency : "USD", 
@@ -1207,7 +1207,7 @@ Returns all offer creates and cancels over time for a given trading pair.
         
         {
             base : {
-                currency : "STR"
+                currency : "XPR"
             },
             counter : { 
                 currency : "USD",

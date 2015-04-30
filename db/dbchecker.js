@@ -3,10 +3,10 @@ function checker (config) {
   var     _ = require('lodash'),
     winston = require('winston'),
     async   = require('async'),
-    stellar  = require( 'stellar-lib' ),
-    Remote  = stellar.Remote,
-    Amount  = stellar.Amount,
-    Ledger  = require( '../node_modules/stellar-lib/src/js/ripple/ledger' ).Ledger,
+    payshares  = require( 'payshares-lib' ),
+    Remote  = payshares.Remote,
+    Amount  = payshares.Amount,
+    Ledger  = require( '../node_modules/payshares-lib/src/js/ripple/ledger' ).Ledger,
     db;
     
 /*  

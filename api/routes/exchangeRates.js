@@ -1,5 +1,5 @@
 var moment = require('moment'),
-  stellar   = require('stellar-lib'),
+  payshares   = require('payshares-lib'),
   async    = require('async'),
   _        = require('lodash'),
   utils    = require('../utils');
@@ -17,12 +17,12 @@ var moment = require('moment'),
  *      },
  *      {
  *        base    : {currency:"CNY","issuer":"rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK"},
- *        counter : {currency:"STR"}
+ *        counter : {currency:"XPR"}
  *      }
  *    ]
  *  
  *    base    : {currency:"CNY","issuer":"rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK"}, //required if "pairs" not present, for a single currency pair exchange rate
- *    counter : {currency:"STR"}, //require if "pairs" not present, for a single currency pair exchange rate
+ *    counter : {currency:"XPR"}, //require if "pairs" not present, for a single currency pair exchange rate
  *    range   : "hour", "day", "week", "month", year",  //time range to average the price over, defaults to "day"
  *    last    : (boolean) retreive the last traded price only (faster query)  
  *  }
@@ -31,8 +31,8 @@ var moment = require('moment'),
  *  {
  *    pairs : [
  *      {
- *        base    : {currency:"CNY","issuer":"rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK","name":"stellarCN"},
- *        counter : {currency:"STR"},
+ *        base    : {currency:"CNY","issuer":"rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK","name":"paysharesCN"},
+ *        counter : {currency:"XPR"},
  *        rate    : //volume weighted average price
  *        last    : //last trade price
  *        range   : "hour", "day", "month", year" - from request
@@ -45,26 +45,26 @@ var moment = require('moment'),
   curl -H "Content-Type: application/json" -X POST -d '{
     "pairs" : [{
       "base":{"currency":"BTC","issuer":"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
-      "counter":{"currency":"STR"}
+      "counter":{"currency":"XPR"}
     },
     {
       "base":{"currency":"BTC","issuer":"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
-      "counter":{"currency":"STR"}
+      "counter":{"currency":"XPR"}
     },
     {
       "base":{"currency":"BTC","issuer":"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
-      "counter":{"currency":"STR"}
+      "counter":{"currency":"XPR"}
     },
     {
       "base":{"currency":"BTC","issuer":"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
-      "counter":{"currency":"STR"}
+      "counter":{"currency":"XPR"}
     }] 
   }' http://localhost:5993/api/exchangerates
 
   curl -H "Content-Type: application/json" -X POST -d '{
 
     "base"    : {"currency":"BTC","issuer":"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
-    "counter" : {"currency":"STR"},
+    "counter" : {"currency":"XPR"},
     "last"    : true
  
   }' http://localhost:5993/api/exchangerates
@@ -176,13 +176,13 @@ function parseCurrency (c) {
   else {
     currency = c.currency.toUpperCase();
     
-    if (currency == "STR") {
-      if (c.issuer) return null;   //STR should not have an issuer
-      return {currency:"STR"};
+    if (currency == "XPR") {
+      if (c.issuer) return null;   //XPR should not have an issuer
+      return {currency:"XPR"};
     }
     
-    else if (currency != "STR" && !c.issuer) return null;  //IOUs must have an issuer
-    else if (stellar.UInt160.is_valid(c.issuer)) {
+    else if (currency != "XPR" && !c.issuer) return null;  //IOUs must have an issuer
+    else if (payshares.UInt160.is_valid(c.issuer)) {
     
       issuer = c.issuer;
       name   = utils.getGatewayName(issuer);

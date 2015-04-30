@@ -1,4 +1,4 @@
-var stellar   = require('stellar-lib');
+var payshares   = require('payshares-lib');
 var env      = process.env.NODE_ENV || "development";
 var config   = require('../deployment.environments.json')[env];
 var DBconfig = require('../db.config.json')[env];
@@ -15,7 +15,7 @@ var moment  = require('moment');
 var diff    = require('deep-diff');
 var async   = require('async');
 var store   = require('node-persist');
-var Ledger  = require('../node_modules/stellar-lib/src/js/ripple/ledger').Ledger;
+var Ledger  = require('../node_modules/payshares-lib/src/js/ripple/ledger').Ledger;
 var winston = require('winston');
 var http     = require('http');
 var https    = require('https');
@@ -30,7 +30,7 @@ var options = {
     trusted : false,
     
     servers: [
-      { host: 'http://live.stellar.org', port: 9002, secure: true }
+      { host: 'http://live.payshares.org', port: 9002, secure: true }
     ],
 
     connection_offset: 0,
@@ -55,7 +55,7 @@ if (reset) {
 }
 
 importer.first  = {index : config.startIndex || 0};
-importer.remote = new stellar.Remote(options);
+importer.remote = new payshares.Remote(options);
 
 winston.info("first ledger: ", importer.first ? importer.first.index : "");
 winston.info("last validated ledger: ", importer.validated ? importer.validated.index : "");
@@ -134,7 +134,7 @@ importer.handleLedger = function(remoteLedger, ledgerIndex, callback) {
   } 
   
   // keep track of which server ledgers came from
-  //ledger.server = (server === 'http://0.0.0.0:9002' ? 'http://live.stellar.org:9002' : server);
+  //ledger.server = (server === 'http://0.0.0.0:9002' ? 'http://live.payshares.org:9002' : server);
 
   // check that transactions hash to the expected value
   var txHash;
@@ -170,10 +170,10 @@ importer.handleLedger = function(remoteLedger, ledgerIndex, callback) {
 function formatRemoteLedger(ledger) {
 
   ledger.close_time_rpepoch   = ledger.close_time;
-  ledger.close_time_timestamp = stellar.utils.toTimestamp(ledger.close_time);
-  ledger.close_time_human     = moment(stellar.utils.toTimestamp(ledger.close_time))
+  ledger.close_time_timestamp = payshares.utils.toTimestamp(ledger.close_time);
+  ledger.close_time_human     = moment(payshares.utils.toTimestamp(ledger.close_time))
     .utc().format("YYYY-MM-DD HH:mm:ss Z");
-  ledger.from_stellard_api = true;
+  ledger.from_paysharesd_api = true;
 
   delete ledger.close_time;
   delete ledger.hash;
@@ -204,7 +204,7 @@ function formatRemoteLedger(ledger) {
       var fields = node.FinalFields || node.NewFields;
 
       if (typeof fields.BookDirectory === "string") {
-        node.exchange_rate = stellar.Amount.from_quality(fields.BookDirectory).to_json().value;
+        node.exchange_rate = payshares.Amount.from_quality(fields.BookDirectory).to_json().value;
       }
 
     });
