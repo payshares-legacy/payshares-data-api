@@ -122,7 +122,8 @@ function accountsCreated(params, callback) {
 /* below is a workaround for the fact that we dont care about the ledger history
    before ledger #2227574 */ 
    
-    var genTime      = moment("2014-Dec-11 22:55:10+00:00"); //date of first ledger
+    //var genTime      = moment("2014-Dec-11 22:55:10+00:00"); //date of first ledger
+    var genTime      = moment("2015-Apr-27 23:59:59+00:00"); //date of first ledger
     var nGenAccounts = 2879888;
 
 //if we are getting intervals, add the genesis accounts to the
