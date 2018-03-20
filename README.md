@@ -58,7 +58,7 @@ Exchange offers exercised over time - returns volume in terms of base and counte
 + Request (json)
 
         {    
-            base : {currency: "XPR"},
+            base : {currency: "XPS"},
             counter : {currency: "USD", issuer: "gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"},
             startTime : "2014-03-11",
             endTime : "2014-03-12",
@@ -134,7 +134,7 @@ Exchange offers exercised over time - returns volume in terms of base and counte
             startTime : "2014-03-11T11:44:00+00:00",
             endTime   : "2014-03-12T12:09:00+00:00",
             base      : {
-                currency : "XPR"
+                currency : "XPS"
             },
             counter : {
                 currency : "USD",
@@ -179,7 +179,7 @@ The amount of value sent from all accounts for a specific currency over time.
 #### POST
 
 + Parameters
-    + currency (string) ... "XPR", "USD", etc.
+    + currency (string) ... "XPS", "USD", etc.
     + issuer   (string) ... "rvYAfWj5gh67oV6f..." 
     + startTime (string) ... any momentjs-readable date
     + endTime (string) ... any momentjs-readable date
@@ -515,7 +515,7 @@ The exchange rates between two currencies for a given time period.  Returns the 
             pairs : [
                 {
                     base    : {currency:"CNY","issuer":"rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK"},
-                    counter : {currency:"XPR"}
+                    counter : {currency:"XPS"}
                 }
             ],
             range : "day"
@@ -539,7 +539,7 @@ The exchange rates between two currencies for a given time period.  Returns the 
                         name     : "paysharesCN"
                     },
                     counter : {
-                        currency : "XPR"
+                        currency : "XPS"
                     },
                     rate    : .5412
                     last    : .5405
@@ -550,12 +550,12 @@ The exchange rates between two currencies for a given time period.  Returns the 
             }
 
 ### market_traders [/market_traders{base}{counter}{range}{startTime}{format}]
-Returns a list of accounts that participated in trading the specified trading pair during the specified time range, ordered by base currency volume.  If no trading pair is provided, the API uses a list of the top XPR markets
+Returns a list of accounts that participated in trading the specified trading pair during the specified time range, ordered by base currency volume.  If no trading pair is provided, the API uses a list of the top XPS markets
 
 #### POST
 
 + Parameters
-    + base (JSON, optional) ... base currency-issuer. If not present, top XPR markets are queried
+    + base (JSON, optional) ... base currency-issuer. If not present, top XPS markets are queried
     + counter  (JSON, optional) ... counter currency-issuer. Required if base is present
     + range (string, optional) ... Any of the following ("24hr", "3d", "7d")
     + startTime (string, optional) ... moment.js readable date string
@@ -565,7 +565,7 @@ Returns a list of accounts that participated in trading the specified trading pa
 
         {
             base : {
-                currency : "XPR"
+                currency : "XPS"
             },
             counter : {
                 currency : "USD",
@@ -625,7 +625,7 @@ Total value of currencies for the top gateways on the payshares network, normali
 
 + Parameters
     + time (string) ... any momentjs-readable date.  The time of desired snapshot
-    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to XPR
+    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to XPS
 
 + Request (json)
 
@@ -677,7 +677,7 @@ The total trading volume for the top 5 markets on the payshares network for a gi
 + Parameters 
     + startTime (string, optional) ... any momentjs-readable date, defaults to 1 day before end time
     + endTime (string, optional) ... any momentjs-readable date, defaults to now
-    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to XPR
+    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to XPS
  
 + Request (json)
 
@@ -695,7 +695,7 @@ The total trading volume for the top 5 markets on the payshares network for a gi
         { 
             startTime    : '2014-03-13T20:26:24+00:00',
             endTime      : '2014-03-14T20:26:24+00:00',
-            exchange     : { currency: 'XPR' },
+            exchange     : { currency: 'XPS' },
             exchangeRate : 1,                 
             total        : 1431068.4284775178,
             count        : 627,
@@ -706,7 +706,7 @@ The total trading volume for the top 5 markets on the payshares network for a gi
                         issuer:"gDSSa75HPagWcvQmwH7D51dT5DPmvsKL4q"
                     },
                     counter : {
-                        currency:"XPR"
+                        currency:"XPS"
                     },
                     rate            : 69.9309953931345,
                     count           : 99,
@@ -720,14 +720,14 @@ The total trading volume for the top 5 markets on the payshares network for a gi
         } 
 
 ### total_value_sent [/total_value_sent{startTime}{endTime}{exchange}]
-The total of amounts sent or exchanged from any wallet, either through a payment or an "offerCreate" that exercises another offer, for a curated list of currency/issuers and XPR, normalized to a specified currency
+The total of amounts sent or exchanged from any wallet, either through a payment or an "offerCreate" that exercises another offer, for a curated list of currency/issuers and XPS, normalized to a specified currency
 
 #### POST  
 
 + Parameters 
     + startTime (string, optional) ... any momentjs-readable date, defaults to 1 day before end time
     + endTime (string, optional) ... any momentjs-readable date, defaults to now
-    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to XPR
+    + exchange (JSON, optional) ... desired currency for valuation, in the form {currency, issuer}. Defaults to XPS
  
 + Request (json)
 
@@ -814,7 +814,7 @@ Returns a list of offers excercised for a given account. Providing a time increm
                 "USD",
                 "r4cgRZUJs7sA....",
                 0.4999999999999929,
-                "XPR",
+                "XPS",
                 null,
                 37.5,
                 "buy",
@@ -843,7 +843,7 @@ Returns a list of offers excercised for a given account. Providing a time increm
                         amount   : 0.4999999999999929
                     },
                     counter : {
-                        currency : "XPR",
+                        currency : "XPS",
                         issuer   : null,
                         amount   : 37.5
                     },
@@ -863,8 +863,8 @@ Returns a list of offers excercised for a given account. Providing a time increm
 + Response 200 (text/csv)
     
         baseCurrency, baseIssuer, baseAmount, counterCurrency, counterIssuer, counterAmount, type, rate, counterparty, time, txHash, ledgerIndex
-        USD, r4cgRZUJs7sAX..., 0.499999, XPR, , 37.5, buy, 0.0133, rn9dcbUdqY..., 2013-06-25T18:38:30+00:00, DB5620CB7FAA1ADE6FD2E6...., 1137051
-        XPR, , 40.16, USD, r4cgRZUJs7sA..., 0.502, buy, 80, rn9dcbUdqY..., 2013-06-25T18:41:10+00:00, DB5620CB7FAA1ADE6FD2E6...., 1137069
+        USD, r4cgRZUJs7sAX..., 0.499999, XPS, , 37.5, buy, 0.0133, rn9dcbUdqY..., 2013-06-25T18:38:30+00:00, DB5620CB7FAA1ADE6FD2E6...., 1137051
+        XPS, , 40.16, USD, r4cgRZUJs7sA..., 0.502, buy, 80, rn9dcbUdqY..., 2013-06-25T18:41:10+00:00, DB5620CB7FAA1ADE6FD2E6...., 1137069
         ...
         ...
         ...
@@ -901,7 +901,7 @@ Returns a list of transactions in which the specified account sent or received a
         [
             ["currency","issuer","type","amount","counterparty","time","txHash","ledgerIndex"],
             [
-                "XPR",
+                "XPS",
                 "",
                 "received",
                 0.01,
@@ -922,7 +922,7 @@ Returns a list of transactions in which the specified account sent or received a
             startTime : "2015-01-10T18:00:00+00:00",
             endTime   : "2014-01-01T18:00:00+00:00",
             summary   : {
-                "XPR" : {
+                "XPS" : {
                     received: {
                         amount : 1465.35985, 
                         count  : 10
@@ -931,7 +931,7 @@ Returns a list of transactions in which the specified account sent or received a
             },
             transactions : [
                 {
-                    currency     : "XPR",
+                    currency     : "XPS",
                     issuer       : "",
                     type         : "received",
                     amount       : 0.01,
@@ -949,8 +949,8 @@ Returns a list of transactions in which the specified account sent or received a
 + Response 200 (text/csv)
     
         currency, issuer, type, amount, counterparty, time, txHash, ledgerIndex
-        XPR, , received, 0.01, rHaaB.., 2014-04-08T09:50:30+00:00, 3F05E56E..., 5960292
-        XPR, , received, 250, r9Toy.., 2014-04-05T15:35:00+00:00, 0F1A2B0..., 5913459
+        XPS, , received, 0.01, rHaaB.., 2014-04-08T09:50:30+00:00, 3F05E56E..., 5960292
+        XPS, , received, 250, r9Toy.., 2014-04-05T15:35:00+00:00, 0F1A2B0..., 5913459
         ...
         ...
         ...
@@ -1152,7 +1152,7 @@ Returns all offer creates and cancels over time for a given trading pair.
 
         {
             base    : {
-                currency : "XPR"
+                currency : "XPS"
             },
             counter : {
                 currency : "USD", 
@@ -1207,7 +1207,7 @@ Returns all offer creates and cancels over time for a given trading pair.
         
         {
             base : {
-                currency : "XPR"
+                currency : "XPS"
             },
             counter : { 
                 currency : "USD",

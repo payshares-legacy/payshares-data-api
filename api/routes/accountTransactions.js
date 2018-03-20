@@ -111,7 +111,7 @@ function accountTransactions(params, callback, unlimit) {
         //value[3] = amount
         //value[4] = counterparty
         
-        if (value[0]=='XPR') {
+        if (value[0]=='XPS') {
           if (!stats[value[0]])           stats[value[0]] = {};
           if (!stats[value[0]][value[2]]) stats[value[0]][value[2]] = {amount:0, count:0};
           stats[value[0]][value[2]]['amount'] += value[3];

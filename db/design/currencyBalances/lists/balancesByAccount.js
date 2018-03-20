@@ -28,7 +28,7 @@ function(head, req) {
  
  http://127.0.0.1:5984/payshares2/_design/currencyBalances/_list/balancesByAccount/v1?startkey=["USD.rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",2013]&endkey=["USD.rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B",2015]
  
- http://127.0.0.1:5984/payshares2/_design/currencyBalances/_list/balancesByAccount/v1?startkey=["XPR",2013]&endkey=["XPR",2015]
+ http://127.0.0.1:5984/payshares2/_design/currencyBalances/_list/balancesByAccount/v1?startkey=["XPS",2013]&endkey=["XPS",2015]
  
  
  * * 

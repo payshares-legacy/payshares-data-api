@@ -9,16 +9,16 @@ var winston = require('winston'),
  * 
  *  total of amounts sent or exchanged from any wallet, either through a payment 
  *  or an "offerCreate" that exercises another offer, for a curated list of 
- *  currency/issuers and XPR, normalized to a specified currency
+ *  currency/issuers and XPS, normalized to a specified currency
  *
  *  request : 
  *
  * {
  *    startTime : (any momentjs-readable date), // optional, defaults to 1 day before end time
  *    endTime   : (any momentjs-readable date), // optional, defaults to now
- *    exchange  : {                             // optional, defaults to XPR
- *      currency  : (XPR, USD, BTC, etc.),         
- *      issuer    : "rAusZ...."                 // optional, required if currency != XPR
+ *    exchange  : {                             // optional, defaults to XPS
+ *      currency  : (XPS, USD, BTC, etc.),         
+ *      issuer    : "rAusZ...."                 // optional, required if currency != XPS
  *    }
  * }
  *
@@ -62,15 +62,15 @@ var winston = require('winston'),
 function totalValueSent(params, callback) {
 
   var options = {};
-  var ex = params.exchange || {currency:"XPR"};
+  var ex = params.exchange || {currency:"XPS"};
   
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "XPR" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "XPS" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "XPR" && ex.issuer)
-    return callback('XPR cannot have an issuer');
+  else if (ex.currency == "XPS" && ex.issuer)
+    return callback('XPS cannot have an issuer');
  
   options.ex = ex;
  
@@ -82,17 +82,17 @@ function totalValueSent(params, callback) {
         });
       });
     }).flatten().value();
-  options.currencies.push({currency: 'XPR'});
+  options.currencies.push({currency: 'XPS'});
 
   options.conversionPairs = [];
   options.currencies.forEach(function(currency) {
     
-    if (currency.currency == 'XPR') {
+    if (currency.currency == 'XPS') {
       return;
     }
 
     options.conversionPairs.push({
-      base    : {currency: 'XPR'},
+      base    : {currency: 'XPS'},
       counter : currency
     });
   });
@@ -201,7 +201,7 @@ function totalValueSent(params, callback) {
       getExchangeRates(options, function(error, rates){
         if (error) return callback(error);
         
-        var finalRate = options.ex.currency == "XPR" ? 1 : null;
+        var finalRate = options.ex.currency == "XPS" ? 1 : null;
         
         rates.forEach(function(pair, index){
           currencies[index].rate            = pair.rate || 0; 
@@ -233,8 +233,8 @@ function totalValueSent(params, callback) {
           var total = 0, count = 0;
           currencies.forEach(function(currency, index) {
   
-            if (currency.currency == "XPR") {
-              currency.rate            = 1; //for XPR
+            if (currency.currency == "XPS") {
+              currency.rate            = 1; //for XPS
               currency.convertedAmount = currency.amount;
             }
             
@@ -298,14 +298,14 @@ function totalValueSent(params, callback) {
   
   
   /*
-   * get XPR to specified currency conversion
+   * get XPS to specified currency conversion
    * 
    */
   function getConversion (params, callback) {
     
     // Mimic calling offersExercised 
     require("./offersExercised")({
-      base      : {currency:"XPR"},
+      base      : {currency:"XPS"},
       counter   : {currency:params.currency,issuer:params.issuer},
       startTime : params.startTime,
       endTime   : params.endTime,

@@ -31,9 +31,9 @@ function (doc) {
           previous = node.PreviousFields ? node.PreviousFields.Balance : 0,
           change   = (balance - previous) / 1000000.0;
             
-          balance  = balance / 1000000.0; //convert to XPR
+          balance  = balance / 1000000.0; //convert to XPS
          
-          emit(["XPR"].concat(timestamp), [fields.Account, balance, change, unix, tx.hash]);
+          emit(["XPS"].concat(timestamp), [fields.Account, balance, change, unix, tx.hash]);
         } 
       
       } else if (node.LedgerEntryType === "RippleState") {

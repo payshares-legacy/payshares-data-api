@@ -13,9 +13,9 @@ var winston = require('winston'),
  *
  * {
  *    time : "2014-03-13T20:39:26+00:00"      //time of desired snapshot
- *    exchange  : {                           // optional, defaults to XPR
- *      currency  : (XPR, USD, BTC, etc.),         
- *      issuer    : "rAusZ...."               // optional, required if currency != XPR
+ *    exchange  : {                           // optional, defaults to XPS
+ *      currency  : (XPS, USD, BTC, etc.),         
+ *      issuer    : "rAusZ...."               // optional, required if currency != XPS
  *    }
  * }
  *
@@ -62,15 +62,15 @@ var winston = require('winston'),
 function totalNetworkValue(params, callback) {
 
   var cacheKey, viewOpts = {};
-  var ex = params.exchange || {currency:"XPR"};
+  var ex = params.exchange || {currency:"XPS"};
   
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "XPR" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "XPS" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "XPR" && ex.issuer)
-    return callback('XPR cannot have an issuer');
+  else if (ex.currency == "XPS" && ex.issuer)
+    return callback('XPS cannot have an issuer');
  
  
   //all currencies we are going to check    
@@ -85,12 +85,12 @@ function totalNetworkValue(params, callback) {
   var conversionPairs = [];
   currencies.forEach(function(currency) {
     
-    if (currency.currency == 'XPR') {
+    if (currency.currency == 'XPS') {
       return;
     }
 
     conversionPairs.push({
-      base    : {currency: 'XPR'},
+      base    : {currency: 'XPS'},
       counter : currency
     });
   });
@@ -142,7 +142,7 @@ function totalNetworkValue(params, callback) {
       getExchangeRates(time, conversionPairs, function(error, rates){
         if (error) return callback(error);
         
-        var finalRate = ex.currency == "XPR" ? 1 : null;
+        var finalRate = ex.currency == "XPS" ? 1 : null;
         
         rates.forEach(function(pair, index){
           currencies[index].rate            = pair.rate; 
@@ -154,11 +154,11 @@ function totalNetworkValue(params, callback) {
               pair.counter.issuer   == ex.issuer) finalRate = pair.rate;
         });
         
-        getXPRbalance(function(error, balance){
+        getXPSbalance(function(error, balance){
           if (error) return callback(error);
           
           currencies.push({
-            currency : "XPR",
+            currency : "XPS",
             amount   : balance
           })
           
@@ -183,8 +183,8 @@ function totalNetworkValue(params, callback) {
           var total = 0, count = 0;
           currencies.forEach(function(currency, index) {
   
-            if (currency.currency == "XPR") {
-              currency.rate            = 1; //for XPR
+            if (currency.currency == "XPS") {
+              currency.rate            = 1; //for XPS
               currency.convertedAmount = currency.amount;
             }
             
@@ -246,14 +246,14 @@ function totalNetworkValue(params, callback) {
   
   
   /*
-   * get XPR to specified currency conversion
+   * get XPS to specified currency conversion
    * 
    */
   function getConversion (params, callback) {
     
     // Mimic calling offersExercised 
     require("./offersExercised")({
-        base      : {currency:"XPR"},
+        base      : {currency:"XPS"},
         counter   : {currency:params.currency,issuer:params.issuer},
         startTime : params.startTime,
         endTime   : params.endTime,
@@ -274,7 +274,7 @@ function totalNetworkValue(params, callback) {
   *  getLatestLedgerSaved gets the ledger with the highest
   *  index saved in CouchDB
   */  
-  function getXPRbalance(callback) {
+  function getXPSbalance(callback) {
     db.list({descending:true, startkey:'_c', limit: 1}, function(error, res){
       if (error) return callback("CouchDB - " + error);  
       if (!res.rows.length) return callback("no ledgers saved"); //no ledgers saved;

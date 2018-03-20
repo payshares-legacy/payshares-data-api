@@ -64,7 +64,7 @@ function getStats (start, end, index) {
       
     } else {
       if (!rows[0]) {
-        var header = ["startTime", "totalVolume", "count", "XPRrate"];
+        var header = ["startTime", "totalVolume", "count", "XPSrate"];
         res.components.forEach(function(c){
           header.push(c.base.currency+"/"+c.counter.currency+"-volume");
           header.push(c.base.currency+"/"+c.counter.currency+"-count");

@@ -31,7 +31,7 @@ var moment = require('moment');
  */
 var getMetric = function (params, callback) {
     
-  var ex        = params.exchange || {currency:"XPR"};  
+  var ex        = params.exchange || {currency:"XPS"};  
   var result    = tools.parseTimeRange(params.startTime, params.endTime);
   var keys      = [];
   var increment = (params.timeIncrement || 'month').toLowerCase();
@@ -42,9 +42,9 @@ var getMetric = function (params, callback) {
   if (params.metric) params.metric = params.metric.toLowerCase();
   else return callback('metric parameter is required');
   
-  if      (params.metric === 'topmarkets')        keyBase = 'TM:XPR:hist:';
-  else if (params.metric === 'totalvaluesent')    keyBase = 'TVS:XPR:hist:';
-  else if (params.metric === 'totalnetworkvalue') keyBase = 'TNV:XPR:hist:';
+  if      (params.metric === 'topmarkets')        keyBase = 'TM:XPS:hist:';
+  else if (params.metric === 'totalvaluesent')    keyBase = 'TVS:XPS:hist:';
+  else if (params.metric === 'totalnetworkvalue') keyBase = 'TNV:XPS:hist:';
   else return callback("invalid metric");
   
   if (result.error) {
@@ -54,10 +54,10 @@ var getMetric = function (params, callback) {
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "XPR" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "XPS" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "XPR" && ex.issuer)
-    return callback('XPR cannot have an issuer');
+  else if (ex.currency == "XPS" && ex.issuer)
+    return callback('XPS cannot have an issuer');
       
   if (increment !== 'day' && 
       increment !== 'week' &&
@@ -87,7 +87,7 @@ var getMetric = function (params, callback) {
     
     if (params.exchange && rows.length) {
       var options = {
-        base      : {currency:'XPR'},
+        base      : {currency:'XPS'},
         counter   : params.exchange,
         start     : moment.utc(result.start).subtract(1, increment).startOf(increment),
         end       : result.end,
@@ -108,7 +108,7 @@ var getMetric = function (params, callback) {
   
   
   /*
-   * get XPR to specified currency conversion
+   * get XPS to specified currency conversion
    * 
    */
   var getConversion = function (params, callback) {

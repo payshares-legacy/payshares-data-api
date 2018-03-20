@@ -11,7 +11,7 @@ var winston = require('winston'),
  * 
  * 
    curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "XPR"},
+    "base"  : {"currency": "XPS"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Feb 10, 2014 4:44:00 am",
     "endTime"   : "Feb 11, 2014 5:09:00 am",
@@ -22,7 +22,7 @@ var winston = require('winston'),
     
 
    curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "XPR"},
+    "base"  : {"currency": "XPS"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Feb 10, 2014 4:44:00 am",
     "endTime"   : "Feb 11, 2014 5:09:00 am",
@@ -32,7 +32,7 @@ var winston = require('winston'),
     }' http://localhost:5993/api/offers
 
    curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "XPR"},
+    "base"  : {"currency": "XPS"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Feb 10, 2014 4:44:00 am",
     "endTime"   : "Apr 16, 2014 5:09:00 am",
@@ -154,10 +154,10 @@ function offers (params, callback) {
       
     } else if (!params.base.issuer) {
       
-      if (params.base.currency.toUpperCase() === 'XPR') {
-        options.base = 'XPR';
+      if (params.base.currency.toUpperCase() === 'XPS') {
+        options.base = 'XPS';
       } else {
-        options.error = 'must specify issuer for all currencies other than XPR';
+        options.error = 'must specify issuer for all currencies other than XPS';
         return;
       }
       
@@ -181,10 +181,10 @@ function offers (params, callback) {
       return;
       
     } else if (!params.counter.issuer) {
-      if (params.counter.currency.toUpperCase()  === 'XPR') {
-        options.counter = 'XPR';
+      if (params.counter.currency.toUpperCase()  === 'XPS') {
+        options.counter = 'XPS';
       } else {
-        options.error = 'must specify issuer for all currencies other than XPR';
+        options.error = 'must specify issuer for all currencies other than XPS';
         return;
       }
     } else if (params.counter.issuer && payshares.UInt160.is_valid(params.counter.issuer)) {

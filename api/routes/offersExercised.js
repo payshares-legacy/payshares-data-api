@@ -10,7 +10,7 @@ var winston = require('winston'),
  *
  *  expects params to have:
  *  {
- *    base: {currency: "XPR"},
+ *    base: {currency: "XPS"},
  *    counter: {currency: "USD", issuer: "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
  *    
  *    descending: true/false, // optional, defaults to true
@@ -48,7 +48,7 @@ var winston = require('winston'),
     }' http://localhost:5993/api/offersExercised    
 
   curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "XPR"},
+    "base"  : {"currency": "XPS"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Mar 10, 2014 4:35 am",
     "endTime"   : "Mar 11, 2014 5:10:30 am",
@@ -60,7 +60,7 @@ var winston = require('winston'),
  
  
   curl -H "Content-Type: application/json" -X POST -d '{
-    "base"  : {"currency": "XPR"},
+    "base"  : {"currency": "XPS"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Mar 11, 2014 4:44:00 am",
     "endTime"   : "Mar 12, 2014 5:09:00 am",
@@ -72,7 +72,7 @@ var winston = require('winston'),
  
   curl -H "Content-Type: application/json" -X POST -d '{
     "base"  : {"currency": "BTC", "issuer" : "rNPRNzBB92BVpAhhZr4iXDTveCgV5Pofm9"},
-    "counter" : {"currency": "XPR"},
+    "counter" : {"currency": "XPS"},
     "startTime" : "Apr 7, 2014 4:44:00 am",
     "endTime"   : "Apr 11, 2014 5:09:00 am",
     "reduce"    : false,
@@ -591,10 +591,10 @@ function offersExercised (params, callback, unlimit) {
       
     } else if (!params.base.issuer) {
       
-      if (params.base.currency.toUpperCase() === 'XPR') {
-        options.base = 'XPR';
+      if (params.base.currency.toUpperCase() === 'XPS') {
+        options.base = 'XPS';
       } else {
-        options.error = 'must specify issuer for all currencies other than XPR';
+        options.error = 'must specify issuer for all currencies other than XPS';
         return;
       }
       
@@ -618,10 +618,10 @@ function offersExercised (params, callback, unlimit) {
       return;
       
     } else if (!params.counter.issuer) {
-      if (params.counter.currency.toUpperCase()  === 'XPR') {
-        options.counter = 'XPR';
+      if (params.counter.currency.toUpperCase()  === 'XPS') {
+        options.counter = 'XPS';
       } else {
-        options.error = 'must specify issuer for all currencies other than XPR';
+        options.error = 'must specify issuer for all currencies other than XPS';
         return;
       }
     } else if (params.counter.issuer && payshares.UInt160.is_valid(params.counter.issuer)) {

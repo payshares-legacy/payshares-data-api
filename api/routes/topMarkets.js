@@ -17,9 +17,9 @@ var winston = require('winston'),
  * {
  *    startTime : (any momentjs-readable date), // optional, defaults to 1 day before end time
  *    endTime   : (any momentjs-readable date), // optional, defaults to now
- *    exchange  : {                             // optional, defaults to XPR
- *      currency  : (XPR, USD, BTC, etc.),         
- *      issuer    : "rAusZ...."                 // optional, required if currency != XPR
+ *    exchange  : {                             // optional, defaults to XPS
+ *      currency  : (XPS, USD, BTC, etc.),         
+ *      issuer    : "rAusZ...."                 // optional, required if currency != XPS
  *    }
  *  }
  *
@@ -28,14 +28,14 @@ var winston = require('winston'),
  * { 
  *    startTime    : '2014-03-13T20:26:24+00:00',   //period start
  *    endTime      : '2014-03-14T20:26:24+00:00',   //period end
- *    exchange     : { currency: 'XPR' },           //requested exchange currency
- *    exchangeRate : 1,                             //XPR exchange rate of requested currency
+ *    exchange     : { currency: 'XPS' },           //requested exchange currency
+ *    exchangeRate : 1,                             //XPS exchange rate of requested currency
  *    total        : 1431068.4284775178,            //total volume in requested currency
  *    count        : 627,                           //number of trades
  *    components   : [                              //list of component markets
  *      { 
  *        base            : {"currency":"USD","issuer":"rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
- *        counter         : {"currency":"XPR"},
+ *        counter         : {"currency":"XPS"},
  *        rate            : 69.9309953931345,
  *        count           : 99,
  *        amount          : 3107.9273091242917,
@@ -64,23 +64,23 @@ var winston = require('winston'),
 function topMarkets(params, callback) {
 
   var cacheKey, viewOpts = {};
-  var ex = params.exchange || {currency:"XPR"};
+  var ex = params.exchange || {currency:"XPS"};
   
   if (typeof ex != 'object')               return callback('invalid exchange currency');
   else if (!ex.currency)                   return callback('exchange currency is required');
   else if (typeof ex.currency != 'string') return callback('invalid exchange currency');
-  else if (ex.currency.toUpperCase() != "XPR" && !ex.issuer)
+  else if (ex.currency.toUpperCase() != "XPS" && !ex.issuer)
     return callback('exchange issuer is required');
-  else if (ex.currency == "XPR" && ex.issuer)
-    return callback('XPR cannot have an issuer');
+  else if (ex.currency == "XPS" && ex.issuer)
+    return callback('XPS cannot have an issuer');
 
-  //these must be traded in terms of XPR - perhaps we can change this later
+  //these must be traded in terms of XPS - perhaps we can change this later
   var marketPairs = _(gatewayList).map(function(gateway) {
     return _.map(gateway.accounts, function(account) {
       return _.map(account.currencies, function(currency) {
         return {
           base: {currency: currency, issuer: account.address},
-          counter: {currency: 'XPR'}
+          counter: {currency: 'XPS'}
         };
       });
     });
@@ -198,24 +198,24 @@ function topMarkets(params, callback) {
       var exchangeRate;
       var rates = { };
       
-      //get rates vs XPR
+      //get rates vs XPS
       pairs.forEach(function(pair, index) {
-        if (pair.counter.currency === 'XPR') {
+        if (pair.counter.currency === 'XPS') {
           rates[pair.base.currency + "." + pair.base.issuer] = pair.rate;
         }
       });
       
       
       
-      if (ex.currency == 'XPR') { 
+      if (ex.currency == 'XPS') { 
         exchangeRate = 1;
       } else if (rates[ex.currency + '.' + ex.issuer]) {
         exchangeRate = 1 / rates[ex.currency + '.' + ex.issuer];
       } 
       
-      //convert non - XPR to XPR value
+      //convert non - XPS to XPS value
       pairs.forEach(function(pair, index) {
-        if (pair.counter.currency !== 'XPR') {
+        if (pair.counter.currency !== 'XPS') {
           pair.rate = rates[pair.base.currency + "." + pair.base.issuer];
         }  
       })
@@ -260,14 +260,14 @@ function topMarkets(params, callback) {
 
 
   /*
-   * get XPR to specified currency conversion
+   * get XPS to specified currency conversion
    * 
    */
   function getConversion (params, callback) {
     
     // Mimic calling offersExercised 
     require("./offersExercised")({
-      base      : {currency:"XPR"},
+      base      : {currency:"XPS"},
       counter     : {currency:params.currency,issuer:params.issuer},
       startTime : params.startTime,
       endTime   : params.endTime,
