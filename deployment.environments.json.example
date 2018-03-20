@@ -6,7 +6,7 @@
     "maxSockets" : 150,
     "batchSize"  : 100,
     "startIndex" : 2227574,
-    "stellards"   :  [
+    "paysharesds"   :  [
       "http://localhost:9002"
     ],
     "redis" : {
@@ -26,7 +26,7 @@
     "maxSockets" : 150,
     "batchSize"  : 100,
     "startIndex" : 2227574, 
-    "stellards"   :  [
+    "paysharesds"   :  [
       "http://test.stellar.org:9002"
     ],
     "redis" : {
