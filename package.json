@@ -25,7 +25,7 @@
     "async": "0.2.9",
     "payshares-lib": "git+https://github.com/payshares/payshares-lib.git#master",
     "express": "3.4.8",
-    "request": "2.34.0",
+    "request": "git://github.com/request/request.git#f0c4ec061141051988d1216c24936ad2e7d5c45d",
     "clone": "0.1.11",
     "q": "1.0.0",
     "deep-diff": "0.1.4",
@@ -33,6 +33,9 @@
     "nano": "5.8.0",
     "node-dogstatsd": "0.0.5",
     "node-persist": "0.0.2",
-    "node-schedule": "0.1.13"
+    "node-schedule": "0.1.13",
+    "readable-stream": "git://github.com/nodejs/readable-stream.git#d175d0f68745a5014fc9c41b25b8e0e959269126",
+    "lru-cache": "git://github.com/isaacs/node-lru-cache.git#7062a0c891bfb80a294be9217e4de0f882e75776",
+    "sjcl": "git://github.com/Payshares/sjcl.git"
   }
 }
