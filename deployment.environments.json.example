@@ -5,9 +5,9 @@
     "datadogPort" : 8125, 
     "maxSockets" : 150,
     "batchSize"  : 100,
-    "startIndex" : 2227574,
+    "startIndex" : 1,
     "paysharesds"   :  [
-      "http://localhost:9002"
+      "http://localhost:5015"
     ],
     "redis" : {
       "enabled" : true,
@@ -25,9 +25,9 @@
     "datadogPort" : 8125,
     "maxSockets" : 150,
     "batchSize"  : 100,
-    "startIndex" : 2227574, 
+    "startIndex" : 1, 
     "paysharesds"   :  [
-      "http://test.stellar.org:9002"
+      "http://stg.payshares.org:5015"
     ],
     "redis" : {
       "enabled" : true,
@@ -45,9 +45,9 @@
     "datadogPort" : 8125,
     "maxSockets"  : 150,  
     "batchSize"   : 100,
-    "startIndex"  : 2227574, 
+    "startIndex"  : 1, 
     "stellards"    :  [
-      "http://live.stellar.org:9002
+      "http://live.payshares.org:5015
     ],
     "redis" : {
       "enabled" : true,
